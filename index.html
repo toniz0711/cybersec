@@ -22,7 +22,7 @@
       <li><a href="#ameacas">Ameaças</a></li>
       <li><a href="#dicas">Dicas</a></li>
       <li><a href="#ferramentas">Ferramentas</a></li>
-      <li><a href="MelPraticas.html"> melhores praticas de segurança  </a></li>
+      <li><a href="#extensao">Extensão</a></li>
       <li><a href="#quiz">Quiz</a></li>
     </ul>
     <a href="#quiz" class="nav-cta">Iniciar Quiz</a>
@@ -70,7 +70,7 @@
 
   <section id="ameacas">
     <div class="container">
-
+      <div class="section-header animate-up">
         <span class="section-tag">// 01 — Ameaças</span>
         <h2 class="section-title">Principais <span>perigos online</span></h2>
         <div class="divider"></div>
@@ -78,27 +78,39 @@
           Conhecer o inimigo é o primeiro passo para se defender.
         </p>
       </div>
-      
-          <h3>Phising </h3>
+      <div class="threats-grid">
+        <article class="threat-card animate-up">
+          <div class="threat-icon">🎣</div>
+          <h3>Phishing</h3>
           <p>Fraude em que criminosos se passam por empresas legítimas para roubar senhas, dados bancários e informações pessoais via e-mail ou sites falsos.</p>
           <span class="threat-badge badge-alto">Risco Alto</span>
-       
+        </article>
+        <article class="threat-card animate-up">
+          <div class="threat-icon">🔒</div>
           <h3>Ransomware</h3>
           <p>Malware que criptografa seus arquivos e exige pagamento (geralmente em criptomoedas) para liberá-los. Backups são sua melhor defesa.</p>
           <span class="threat-badge badge-alto">Risco Alto</span>
-      
+        </article>
+        <article class="threat-card animate-up">
+          <div class="threat-icon">🕵️</div>
           <h3>Engenharia Social</h3>
           <p>Manipulação psicológica para enganar pessoas e obter informações confidenciais sem precisar de invasão técnica.</p>
           <span class="threat-badge badge-alto">Risco Alto</span>
-      
+        </article>
+        <article class="threat-card animate-up">
+          <div class="threat-icon">📶</div>
           <h3>Wi-Fi Público</h3>
           <p>Redes abertas podem ser monitoradas. Dados sensíveis trafegando sem criptografia são alvo fácil para interceptação.</p>
           <span class="threat-badge badge-medio">Risco Médio</span>
-
+        </article>
+        <article class="threat-card animate-up">
+          <div class="threat-icon">🐛</div>
           <h3>Malware</h3>
           <p>Programas maliciosos que infectam dispositivos para roubar dados, espionar ou controlar o sistema sem permissão.</p>
           <span class="threat-badge badge-alto">Risco Alto</span>
-       
+        </article>
+        <article class="threat-card animate-up">
+          <div class="threat-icon">🔑</div>
           <h3>Vazamento de Senhas</h3>
           <p>Quando um site é comprometido, senhas reutilizadas em outros serviços tornam todas as suas contas vulneráveis.</p>
           <span class="threat-badge badge-medio">Risco Médio</span>
@@ -108,52 +120,73 @@
   </section>
 
   <section id="dicas">
-
-    
+    <div class="container">
+      <div class="section-header animate-up">
         <span class="section-tag">// 02 — Boas práticas</span>
         <h2 class="section-title">Dicas <span>essenciais</span></h2>
-       
-        <p>
+        <div class="divider"></div>
+        <p class="section-subtitle">
           Hábitos simples que reduzem drasticamente seus riscos.
         </p>
       </div>
-   
-
+      <div class="tips-layout">
+        <div class="tips-visual animate-up">
+          <svg class="shield-visual" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#00f5c4" stop-opacity="0.9"/>
+                <stop offset="100%" stop-color="#7b2fff" stop-opacity="0.6"/>
+              </linearGradient>
+              <filter id="shieldGlow">
+                <feGaussianBlur stdDeviation="4" result="b"/>
+                <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+            </defs>
+            <circle cx="150" cy="150" r="130" fill="none" stroke="#00f5c4" stroke-opacity="0.15" stroke-dasharray="4 6"/>
+            <circle cx="150" cy="150" r="100" fill="none" stroke="#00f5c4" stroke-opacity="0.25" stroke-dasharray="2 4"/>
+            <path d="M150 50 L80 80 V155 C80 200 110 235 150 250 C190 235 220 200 220 155 V80 L150 50 Z"
+                  fill="url(#shieldGrad)" stroke="#00f5c4" stroke-width="2" filter="url(#shieldGlow)" opacity="0.85"/>
+            <path d="M120 150 L142 172 L185 128" stroke="#030712" stroke-width="6"
+                  stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+          </svg>
+        </div>
+        <div class="tips-list">
+          <div class="tip-item animate-up">
             <div class="tip-number">01</div>
             <div class="tip-content">
               <h4>Use senhas fortes e únicas</h4>
               <p>Combine letras, números e símbolos. Nunca repita a mesma senha em sites diferentes.</p>
             </div>
           </div>
-       
+          <div class="tip-item animate-up">
             <div class="tip-number">02</div>
             <div class="tip-content">
               <h4>Ative a autenticação em dois fatores</h4>
               <p>O 2FA garante que mesmo com sua senha vazada, o invasor precise de um segundo código.</p>
             </div>
           </div>
-
-       <div class="tip-number">03</div>
+          <div class="tip-item animate-up">
             <div class="tip-content">
               <h4>Desconfie de links suspeitos</h4>
               <p>Nunca clique em links de e-mails ou SMS pedindo dados urgentes. Acesse o site oficial diretamente.</p>
             </div>
-  
-        
+            <div class="tip-number">03</div>
+          </div>
+          <div class="tip-item animate-up">
             <div class="tip-number">04</div>
             <div class="tip-content">
               <h4>Mantenha tudo atualizado</h4>
               <p>Atualizações corrigem falhas que criminosos exploram. Não adie atualizações de sistema.</p>
             </div>
           </div>
-       
+          <div class="tip-item animate-up">
             <div class="tip-number">05</div>
             <div class="tip-content">
               <h4>Use VPN em redes públicas</h4>
               <p>Cifra sua conexão e evita interceptação de dados em Wi-Fi abertos.</p>
             </div>
           </div>
-   
+          <div class="tip-item animate-up">
             <div class="tip-number">06</div>
             <div class="tip-content">
               <h4>Faça backups regulares</h4>
@@ -166,68 +199,137 @@
   </section>
 
   <section id="ferramentas">
-    
+    <div class="container">
+      <div class="section-header animate-up">
         <span class="section-tag">// 03 — Arsenal</span>
         <h2 class="section-title">Ferramentas <span>recomendadas</span></h2>
-  
-        <p >
-          Softwares confiáveis para reforçar sua proteção digital
+        <div class="divider"></div>
+        <p class="section-subtitle">
+          Softwares confiáveis para reforçar sua proteção digital.
         </p>
       </div>
-      <div>
-      
+      <div class="tools-grid">
+        <div class="tool-card animate-up">
           <span class="tool-emoji">🔐</span>
           <h4>Bitwarden</h4>
           <p>Gerenciador de senhas open-source, gratuito e criptografado.</p>
         </div>
-      
+        <div class="tool-card animate-up">
           <span class="tool-emoji">🛡️</span>
           <h4>Authy / Aegis</h4>
           <p>Apps de autenticação em dois fatores para proteger suas contas.</p>
         </div>
-        
+        <div class="tool-card animate-up">
           <span class="tool-emoji">🌐</span>
           <h4>Proton VPN</h4>
           <p>VPN com criptografia forte e política de zero logs.</p>
         </div>
- 
+        <div class="tool-card animate-up">
           <span class="tool-emoji">📧</span>
           <h4>Proton Mail</h4>
           <p>E-mail criptografado de ponta a ponta para comunicações privadas.</p>
         </div>
-    
+        <div class="tool-card animate-up">
           <span class="tool-emoji">🦊</span>
           <h4>Firefox + uBlock</h4>
           <p>Navegador focado em privacidade com bloqueador de rastreadores.</p>
         </div>
-   
+        <div class="tool-card animate-up">
           <span class="tool-emoji">🔍</span>
           <h4>Have I Been Pwned</h4>
           <p>Verifique se seu e-mail apareceu em algum vazamento de dados.</p>
         </div>
-   
+        <div class="tool-card animate-up">
           <span class="tool-emoji">🧅</span>
           <h4>Tor Browser</h4>
           <p>Anonimato total para navegação em casos de necessidade extrema.</p>
-            </div>
-          
-
+        </div>
+        <div class="tool-card animate-up">
           <span class="tool-emoji">💾</span>
           <h4>VeraCrypt</h4>
           <p>Criptografia de discos e arquivos sensíveis com padrão militar.</p>
         </div>
+      </div>
+    </div>
+  </section>
 
-            <span class="tool-emoji">💾</span>
-          <h4>Sistemas Operacionais em linux</h4>
-          <p>O linux oferece grande suporte para segurança sendo um dos Sistemas mais seguros atualmente, algumas distros recomendaveis para segurança são: <br>1- Arch linux
-          <br> 2- Fedora linux 
-          <br> 3- TailsOS
-          <br> 4- ParrotOS 
-          
-          </p>
+  <section id="extensao">
+    <div class="container">
+      <div class="section-header animate-up">
+        <span class="section-tag">// 04 — Extensão</span>
+        <h2 class="section-title">Extensão <span>Site Seguro?</span></h2>
+        <div class="divider"></div>
+        <p class="section-subtitle">
+          Leve a análise de confiabilidade direto para o seu navegador, em um clique.
+        </p>
+      </div>
+
+      <div class="extension-layout">
+        <div class="extension-mockup animate-up">
+          <div class="browser-mockup">
+            <div class="browser-mockup-bar">
+              <span class="mockup-dot dot-red"></span>
+              <span class="mockup-dot dot-yellow"></span>
+              <span class="mockup-dot dot-green"></span>
+              <span class="browser-mockup-url">https://banco-exemplo.com.br</span>
+            </div>
+            <div class="popup-preview">
+              <div class="popup-preview-header">
+                <span class="logo">🛡️</span>
+                <span>Site Seguro?</span>
+              </div>
+              <div class="popup-preview-url">banco-exemplo.com.br</div>
+              <div class="popup-preview-ring">
+                <svg viewBox="0 0 120 120">
+                  <circle cx="60" cy="60" r="52" class="ring-bg-preview" />
+                  <circle cx="60" cy="60" r="52" class="ring-fill-preview" />
+                </svg>
+                <div class="popup-preview-score">
+                  <span>91</span>
+                  <small>/100</small>
+                </div>
+              </div>
+              <div class="popup-preview-badge">✅ Parece seguro</div>
+              <div class="popup-preview-detail">✓ Conexão criptografada via HTTPS.</div>
+              <div class="popup-preview-detail">✓ Domínio reconhecido como fonte confiável.</div>
+            </div>
+          </div>
         </div>
 
+        <div class="extension-info">
+          <h3>Analise qualquer site em segundos</h3>
+          <p class="extension-desc">
+            A extensão <strong>"Site Seguro?"</strong> roda 100% localmente no seu
+            navegador — sem enviar seus dados de navegação para nenhum servidor.
+            Ela calcula uma pontuação de 0 a 100 usando as mesmas heurísticas de
+            segurança que você aprendeu aqui: HTTPS, reputação de domínio, uso de
+            endereço IP, punycode, TLDs suspeitos, encurtadores de link e padrões
+            comuns de phishing.
+          </p>
+          <ul class="extension-features">
+            <li><span class="feature-check">✓</span> Pontuação de confiabilidade em tempo real</li>
+            <li><span class="feature-check">✓</span> Detecção de typosquatting (ex: g00gle.com, paypa1.com)</li>
+            <li><span class="feature-check">✓</span> Identifica domínios com aparência de malware (DGA)</li>
+            <li><span class="feature-check">✓</span> Checagem opcional na base do Google Safe Browsing</li>
+            <li><span class="feature-check">✓</span> Funciona offline, sem coleta de dados</li>
+            <li><span class="feature-check">✓</span> Compatível com Chrome, Edge e Brave</li>
+          </ul>
+          <div class="extension-btns">
+            <a href="./site-checker-extension.zip" download class="btn-primary">⬇ Baixar Extensão</a>
+            <a href="#extensao-instalar" class="btn-secondary">Como instalar</a>
+          </div>
 
+          <div id="extensao-instalar" class="install-steps">
+            <h4>// Instalação em modo desenvolvedor</h4>
+            <ol>
+              <li>Baixe e descompacte o arquivo <code>.zip</code> acima.</li>
+              <li>Acesse <code>chrome://extensions</code> no seu navegador.</li>
+              <li>Ative o <strong>"Modo do desenvolvedor"</strong> (canto superior direito).</li>
+              <li>Clique em <strong>"Carregar sem compactação"</strong> e selecione a pasta extraída.</li>
+              <li>Pronto! O ícone do escudo aparecerá na barra de extensões.</li>
+            </ol>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -235,7 +337,7 @@
   <section id="quiz">
     <div class="container">
       <div class="section-header animate-up">
-        <span class="section-tag">// 04 — Teste</span>
+        <span class="section-tag">// 05 — Teste</span>
         <h2 class="section-title">Quiz de <span>Segurança Digital</span></h2>
         <div class="divider"></div>
         <p class="section-subtitle">
@@ -256,7 +358,10 @@
         </div>
 
         <div class="quiz-active">
-            <div class="quiz-counter">Pergunta <span>1</span> de <span>10</span></div>
+          <div class="quiz-progress-bar-wrap">
+            <div class="quiz-progress-bar"></div>
+          </div>
+          <div class="quiz-counter">Pergunta <span>1</span> de <span>10</span></div>
           <div class="quiz-question-block">
             <h3 class="quiz-question-text">Carregando pergunta...</h3>
             <div class="quiz-options"></div>
@@ -322,29 +427,21 @@
           <li><a href="#ameacas">Ameaças</a></li>
           <li><a href="#dicas">Dicas</a></li>
           <li><a href="#ferramentas">Ferramentas</a></li>
+          <li><a href="#extensao">Extensão</a></li>
           <li><a href="#quiz">Quiz</a></li>
         </ul>
       </div>
       <div class="footer-col">
         <h5>Recursos</h5>
         <ul>
+          <li><a href="./site-checker-extension.zip" download>Baixar Extensão</a></li>
           <li><a href="https://haveibeenpwned.com" target="_blank" rel="noopener">Have I Been Pwned</a></li>
           <li><a href="https://bitwarden.com" target="_blank" rel="noopener">Bitwarden</a></li>
           <li><a href="https://protonmail.com" target="_blank" rel="noopener">Proton Mail</a></li>
           <li><a href="https://www.cert.br" target="_blank" rel="noopener">CERT.br</a></li>
-          <li><a href="https://new.safernet.org.br/" target="_blank" rel="noopener">Safernet</a></li>
-          
-
         </ul>
       </div>
     </div>
-
-
-
-
-
-
-
     <div class="footer-bottom">
       <span>© 2026 SEC//URE</span>
       <span>// Stay safe. Stay private.</span>

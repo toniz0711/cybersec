@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Site Seguro?</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <div class="container">
+    <header>
+      <span class="logo">🛡️</span>
+      <h1>Site Seguro?</h1>
+    </header>
+
+    <div id="url-display" class="url-display">Carregando...</div>
+
+    <div id="score-ring-wrapper" class="score-ring-wrapper">
+      <svg viewBox="0 0 120 120" class="score-ring">
+        <circle cx="60" cy="60" r="52" class="ring-bg" />
+        <circle cx="60" cy="60" r="52" class="ring-fill" id="ring-fill" />
+      </svg>
+      <div class="score-text">
+        <span id="score-number">--</span>
+        <span class="score-max">/100</span>
+      </div>
+    </div>
+
+    <div id="badge" class="badge">Analisando...</div>
+
+    <div id="sb-status" class="sb-status"></div>
+
+    <div id="details" class="details"></div>
+
+    <footer>
+      <button id="rescan" class="rescan-btn">🔄 Analisar novamente</button>
+      <a href="options.html" target="_blank" class="options-link">⚙️ Configurações</a>
+    </footer>
+  </div>
+
+  <script src="trustedData.js"></script>
+  <script src="analyzer.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

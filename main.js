@@ -1,340 +1,414 @@
+
+function createParticles() {
+  const container = document.querySelector('.particles');
+  if (!container) return;
+
+  for (let i = 0; i < 30; i++) {
+    const p = document.createElement('div');
+    p.classList.add('particle');
+    p.style.left = Math.random() * 100 + '%';
+    p.style.animationDuration = (8 + Math.random() * 15) + 's';
+    p.style.animationDelay = (Math.random() * 10) + 's';
+    p.style.width = p.style.height = (Math.random() * 3 + 1) + 'px';
+    p.style.opacity = Math.random() * 0.6;
+    container.appendChild(p);
+  }
+}
+
+
+function initNavbar() {
+  const navbar = document.querySelector('.navbar');
+  const hamburger = document.querySelector('.hamburger');
+  const navLinks = document.querySelector('.nav-links');
+
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 50) {
+      navbar.style.background = 'rgba(3,7,18,0.97)';
+    } else {
+      navbar.style.background = 'rgba(3,7,18,0.85)';
+    }
+  });
+
+  if (hamburger && navLinks) {
+    hamburger.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+    });
+  }
+
+
+  const sections = document.querySelectorAll('section[id]');
+  const links = document.querySelectorAll('.nav-links a');
+
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(sec => {
+      if (window.scrollY >= sec.offsetTop - 120) {
+        current = sec.getAttribute('id');
+      }
+    });
+    links.forEach(link => {
+      link.classList.remove('active');
+      if (link.getAttribute('href') === '#' + current) {
+        link.classList.add('active');
+      }
+    });
+  });
+}
+
+
+function initScrollAnimations() {
+  const elements = document.querySelectorAll('.animate-up');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, index) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => {
+          entry.target.classList.add('visible');
+        }, index * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  elements.forEach(el => observer.observe(el));
+}
+
+
+function typewriter(el, text, speed = 60) {
+  el.textContent = '';
+  let i = 0;
+  const timer = setInterval(() => {
+    el.textContent += text[i];
+    i++;
+    if (i >= text.length) clearInterval(timer);
+  }, speed);
+}
+
+
+function animateCounter(el, target, suffix = '') {
+  let start = 0;
+  const duration = 2000;
+  const step = (timestamp) => {
+    if (!start) start = timestamp;
+    const progress = Math.min((timestamp - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    el.textContent = Math.floor(eased * target) + suffix;
+    if (progress < 1) requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+
+function initCounters() {
+  const counters = document.querySelectorAll('[data-counter]');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const el = entry.target;
+        const target = parseInt(el.dataset.counter);
+        const suffix = el.dataset.suffix || '';
+        animateCounter(el, target, suffix);
+        observer.unobserve(el);
+      }
+    });
+  }, { threshold: 0.5 });
+
+  counters.forEach(el => observer.observe(el));
+}
+
+
+
 const quizQuestions = [
   {
-    question: 'O que é phishing?',
+    q: "O que é phishing?",
     options: [
-      'Uma técnica de engenharia social que tenta obter dados ou senhas por meio de mensagens falsas.',
-      'Um tipo de vírus que se instala em dispositivos móveis.',
-      'Um método para acelerar a conexão de internet usando proxys.',
-      'Um software que criptografa dados automaticamente no navegador.'
+      "Um tipo de antivírus moderno",
+      "Uma técnica de fraude para roubar dados pessoais via e-mails ou sites falsos",
+      "Um protocolo de segurança de rede",
+      "Um programa de backup de dados"
     ],
-    correctIndex: 0,
-    explanation: 'Phishing é um golpe que usa e-mails ou páginas falsas para roubar credenciais e informações pessoais.'
+    answer: 1,
+    explanation: "Phishing é um ataque onde criminosos se passam por empresas ou pessoas legítimas para enganar vítimas e roubar senhas, dados bancários e informações pessoais."
   },
   {
-    question: 'Qual é a melhor prática para senhas?',
+    q: "Qual das seguintes é uma senha considerada FORTE?",
     options: [
-      'Reutilizar a mesma senha em vários sites para memorizá-la.',
-      'Usar senhas curtas e fáceis de lembrar, como datas de nascimento.',
-      'Criar senhas longas, únicas e armazená-las em um gerenciador de senhas.',
-      'Compartilhar a senha apenas com pessoas confiáveis.'
+      "senha123",
+      "joao1990",
+      "Tr@7!xK#9mQ2",
+      "abcdef"
     ],
-    correctIndex: 2,
-    explanation: 'Senhas fortes e únicas reduzindo o risco em caso de vazamento. Gerenciadores de senhas ajudam a gerenciar essa complexidade.'
+    answer: 2,
+    explanation: "Senhas fortes combinam letras maiúsculas e minúsculas, números e símbolos, com pelo menos 12 caracteres. Evite informações pessoais ou palavras do dicionário."
   },
   {
-    question: 'O que a autenticação em dois fatores (2FA) oferece?',
+    q: "O que significa HTTPS na barra de endereços do navegador?",
     options: [
-      'Permite usar a mesma senha em dois serviços distintos.',
-      'Adiciona uma segunda camada de proteção além da senha.',
-      'Substitui a senha por impressão digital em todos os acessos.',
-      'Elimina a necessidade de atualizar o software.'
+      "O site possui muitas imagens de alta qualidade",
+      "O site está localizado em um servidor rápido",
+      "A comunicação entre seu navegador e o site é criptografada",
+      "O site foi verificado pelo Google"
     ],
-    correctIndex: 1,
-    explanation: '2FA exige algo que você sabe (senha) e algo que você tem (código/smartphone), tornando o acesso mais seguro.'
+    answer: 2,
+    explanation: "O 'S' em HTTPS significa 'Secure' (Seguro). Indica que os dados trafegados entre você e o site estão criptografados via protocolo TLS/SSL."
   },
   {
-    question: 'Qual é a forma mais segura de usar Wi-Fi público?',
+    q: "O que é autenticação de dois fatores (2FA)?",
     options: [
-      'Sempre usar uma VPN para criptografar a conexão.',
-      'Conectar apenas com o celular sem usar apps bancários.',
-      'Apenas visitar sites sem “https”.',
-      'Usar o hotspot de outra pessoa.'
+      "Usar duas senhas diferentes para acessar um site",
+      "Um método que exige dois tipos de verificação de identidade",
+      "Ter duas contas de e-mail ativas",
+      "Um antivírus com dupla proteção"
     ],
-    correctIndex: 0,
-    explanation: 'VPN protege seus dados em redes abertas, evitando que invasores interceptem informações sensíveis.'
+    answer: 1,
+    explanation: "A autenticação 2FA adiciona uma segunda camada de segurança além da senha, como um código SMS, app autenticador ou biometria, dificultando muito o acesso não autorizado."
   },
   {
-    question: 'O que é ransomware?',
+    q: "Você recebeu um e-mail urgente do 'seu banco' pedindo para clicar num link e atualizar seus dados. O que você deve fazer?",
     options: [
-      'Um software que acelera backups na nuvem.',
-      'Um malware que bloqueia acesso a arquivos e exige resgate.',
-      'Uma ferramenta para proteger a rede sem fio.',
-      'Um tipo de firewall avançado.'
+      "Clicar no link imediatamente para não perder acesso à conta",
+      "Responder o e-mail pedindo confirmação",
+      "Ignorar e acessar o site do banco digitando o endereço diretamente no navegador",
+      "Encaminhar o e-mail para amigos alertando"
     ],
-    correctIndex: 1,
-    explanation: 'Ransomware criptografa arquivos e pede pagamento para restaurar o acesso. Backups são a defesa mais confiável.'
+    answer: 2,
+    explanation: "Nunca clique em links de e-mails não solicitados. Acesse sempre o site oficial digitando o endereço diretamente no navegador. Bancos legítimos nunca pedem senhas por e-mail."
   },
   {
-    question: 'Quando um site é comprometido, a prática mais segura é:',
+    q: "O que é uma VPN (Virtual Private Network)?",
     options: [
-      'Continuar usando a mesma senha, pois é só naquele site.',
-      'Mudar a senha apenas se receber uma notificação oficial.',
-      'Alterar a senha imediatamente e evitar reutilizá-la em outros serviços.',
-      'Desinstalar o navegador.'
+      "Um tipo de vírus que rouba dados em redes públicas",
+      "Um serviço que criptografa sua conexão e oculta seu IP",
+      "Um navegador mais seguro para a internet",
+      "Um gerenciador de senhas online"
     ],
-    correctIndex: 2,
-    explanation: 'Após um vazamento, mudar a senha e não reutilizá-la evita que outros serviços também sejam expostos.'
+    answer: 1,
+    explanation: "Uma VPN cria um túnel criptografado para sua conexão, protegendo seus dados em redes Wi-Fi públicas e ocultando seu endereço IP real."
   },
   {
-    question: 'Qual é a principal vantagem de manter software atualizado?',
+    q: "Qual é o risco de usar a mesma senha em vários sites?",
     options: [
-      'Melhora apenas a aparência dos aplicativos.',
-      'Corrige falhas de segurança que invasores podem explorar.',
-      'Aumenta a velocidade da internet automaticamente.',
-      'Reduz o consumo de bateria em todos os dispositivos.'
+      "Nenhum risco, é uma prática recomendada para não esquecer",
+      "Apenas torna o login mais lento",
+      "Se um site for comprometido, todas as suas outras contas ficam vulneráveis",
+      "Pode fazer o computador travar"
     ],
-    correctIndex: 1,
-    explanation: 'Atualizações frequentemente trazem correções de vulnerabilidades que seriam exploradas por atacantes.'
+    answer: 2,
+    explanation: "Usar senhas únicas em cada serviço é essencial. Se um site sofrer vazamento de dados, criminosos tentarão a mesma senha em outros serviços — prática chamada 'credential stuffing'."
   },
   {
-    question: 'Em caso de e-mail suspeito, a atitude mais segura é:',
+    q: "O que é ransomware?",
     options: [
-      'Clicar no link para verificar se é verdadeiro.',
-      'Responder pedindo mais informações.',
-      'Apagar e, se necessário, acessar o serviço direto no site oficial.',
-      'Compartilhar o e-mail com amigos para saber a opinião deles.'
+      "Um software que protege arquivos com senha",
+      "Um malware que criptografa seus arquivos e exige resgate para liberá-los",
+      "Um programa que monitora o uso da internet",
+      "Um tipo de spam publicitário"
     ],
-    correctIndex: 2,
-    explanation: 'Não clique em links suspeitos. Acesse sempre o serviço por meios oficiais e independentes.'
+    answer: 1,
+    explanation: "Ransomware sequestra seus arquivos criptografando-os e exige pagamento (geralmente em criptomoedas) para a recuperação. Manter backups atualizados é a melhor proteção."
   },
   {
-    question: 'O que significa “zero trust”?',
+    q: "Qual das opções abaixo é uma prática SEGURA ao usar Wi-Fi público?",
     options: [
-      'Confiar apenas em dispositivos de casa.',
-      'Nunca confiar automaticamente e sempre verificar usuários e dispositivos.',
-      'Remover senhas de todos os sistemas.',
-      'Usar apenas redes sem fio seguras.'
+      "Acessar o internet banking normalmente",
+      "Desativar o firewall para ter melhor conexão",
+      "Usar uma VPN e evitar transações financeiras",
+      "Compartilhar a senha com desconhecidos por ser gratuito"
     ],
-    correctIndex: 1,
-    explanation: 'Zero trust exige autenticação e verificação contínua, mesmo em redes internas, reduzindo riscos de acesso indevido.'
+    answer: 2,
+    explanation: "Em redes Wi-Fi públicas, use sempre VPN, evite acessar contas bancárias ou informações sensíveis, e confirme que está na rede correta (não em um 'evil twin')."
   },
   {
-    question: 'Qual é a melhor ação após perceber uma conta comprometida?',
+    q: "O que é um gerenciador de senhas?",
     options: [
-      'Ignorar para evitar causar alarme.',
-      'Alterar senha, ativar 2FA e revisar atividades recentes.',
-      'Desinstalar o aplicativo associado.',
-      'Reiniciar o computador e continuar usando normalmente.'
+      "Um caderno físico para anotar senhas",
+      "Um software que gera e armazena senhas de forma criptografada",
+      "Uma função do navegador para lembrar apenas e-mails",
+      "Um serviço pago do governo para recuperar senhas esquecidas"
     ],
-    correctIndex: 1,
-    explanation: 'A reação correta inclui mudar credenciais, ativar proteção adicional e verificar acessos recentes para detectar danos.'
+    answer: 1,
+    explanation: "Gerenciadores de senhas (como Bitwarden, 1Password, KeePass) armazenam suas senhas com criptografia forte, permitindo usar senhas únicas e complexas para cada serviço sem precisar memorizá-las."
   }
 ];
 
-const state = {
-  currentQuestionIndex: 0,
-  correctAnswers: 0,
-  completed: false
-};
-
-const elements = {
-  startBtn: document.getElementById('quiz-start-btn'),
-  nextBtn: document.getElementById('quiz-next-btn'),
-  restartBtn: document.getElementById('quiz-restart-btn'),
-  quizIntro: document.querySelector('.quiz-intro'),
-  quizActive: document.querySelector('.quiz-active'),
-  quizResult: document.querySelector('.quiz-result'),
-  questionText: document.querySelector('.quiz-question-text'),
-  optionsContainer: document.querySelector('.quiz-options'),
-  feedback: document.querySelector('.quiz-feedback'),
-  counter: document.querySelector('.quiz-counter'),
-  resultPct: document.querySelector('.result-score-pct'),
-  resultTitle: document.querySelector('.result-title'),
-  resultMsg: document.querySelector('.result-msg'),
-  resultCorrect: document.querySelector('.num-correct'),
-  resultWrong: document.querySelector('.num-wrong'),
-  resultTotal: document.querySelector('.num-total'),
-  ringFill: document.querySelector('.ring-fill')
-};
+let currentQuestion = 0;
+let score = 0;
+let answered = false;
 
 function initQuiz() {
-  if (!elements.startBtn) return;
+  const startBtn = document.getElementById('quiz-start-btn');
+  const restartBtn = document.getElementById('quiz-restart-btn');
 
-  elements.startBtn.addEventListener('click', startQuiz);
-  elements.restartBtn.addEventListener('click', restartQuiz);
-  setInitialProgress();
-  initStatCounters();
-}
-
-function setInitialProgress() {
-  const total = quizQuestions.length;
-  elements.counter.innerHTML = `Pergunta <span>1</span> de <span>${total}</span>`;
-}
-
-function calculateMedian(values) {
-  const sorted = [...values].sort((a, b) => a - b);
-  const length = sorted.length;
-  if (length === 0) return 0;
-  const middle = Math.floor(length / 2);
-
-  if (length % 2 === 0) {
-    return (sorted[middle - 1] + sorted[middle]) / 2;
+  if (startBtn) {
+    startBtn.addEventListener('click', startQuiz);
   }
 
-  return sorted[middle];
-}
-
-function initStatCounters() {
-  const counters = Array.from(document.querySelectorAll('.stat-number[data-counter]'));
-  if (!counters.length) return;
-
-  const values = counters.map((el) => {
-    const raw = Number(el.dataset.counter);
-    return Number.isFinite(raw) ? raw : 0;
-  });
-
-  const medianValue = calculateMedian(values.map((value) => Math.abs(value)));
-
-  counters.forEach((counter) => {
-    const target = Number(counter.dataset.counter) || 0;
-    const suffix = counter.dataset.suffix || '';
-    const ratio = target > 0 ? target / Math.max(medianValue, 1) : 1;
-    const duration = Math.min(2600, 900 + Math.round(Math.log10(ratio + 1) * 1200));
-    const steps = Math.max(20, Math.round(duration / 20));
-    const increment = Math.max(1, Math.round(target / steps));
-    let current = 0;
-
-    const interval = Math.max(10, Math.round(duration / Math.max(1, Math.ceil(target / increment))));
-
-    const timer = setInterval(() => {
-      current += increment;
-      if (current >= target) {
-        current = target;
-        clearInterval(timer);
-      }
-      counter.textContent = `${current}${suffix}`;
-    }, interval);
-  });
+  if (restartBtn) {
+    restartBtn.addEventListener('click', restartQuiz);
+  }
 }
 
 function startQuiz() {
-  state.currentQuestionIndex = 0;
-  state.correctAnswers = 0;
-  state.completed = false;
-  elements.quizIntro.style.display = 'none';
-  elements.quizResult.style.display = 'none';
-  elements.quizActive.style.display = 'block';
-  elements.nextBtn.style.display = 'none';
-  updateProgress();
-  showQuestion();
-}
+  currentQuestion = 0;
+  score = 0;
+  answered = false;
 
-function showQuestion() {
-  const current = quizQuestions[state.currentQuestionIndex];
-  elements.questionText.textContent = current.question;
-  elements.optionsContainer.innerHTML = '';
-  elements.feedback.className = 'quiz-feedback';
-  elements.feedback.textContent = '';
-  elements.nextBtn.style.display = 'none';
+  document.querySelector('.quiz-intro').style.display = 'none';
+  document.querySelector('.quiz-result').style.display = 'none';
+  document.querySelector('.quiz-active').style.display = 'block';
 
-  current.options.forEach((optionText, index) => {
-    const button = document.createElement('button');
-    button.type = 'button';
-    button.className = 'quiz-option';
-    button.innerHTML = `
-      <span class="quiz-option-letter">${String.fromCharCode(65 + index)}</span>
-      <span>${optionText}</span>
-    `;
-    button.addEventListener('click', () => selectOption(index, button));
-    elements.optionsContainer.appendChild(button);
-  });
-}
-
-function selectOption(selectedIndex, button) {
-  const current = quizQuestions[state.currentQuestionIndex];
-  const correctIndex = current.correctIndex;
-  const allOptions = elements.optionsContainer.querySelectorAll('.quiz-option');
-
-  allOptions.forEach((option, index) => {
-    option.disabled = true;
-    if (index === correctIndex) {
-      option.classList.add('correct');
-    }
-    if (index === selectedIndex && index !== correctIndex) {
-      option.classList.add('wrong');
-    }
-  });
-
-  if (selectedIndex === correctIndex) {
-    state.correctAnswers += 1;
-    elements.feedback.classList.add('quiz-feedback', 'feedback-correct', 'show');
-    elements.feedback.textContent = 'Resposta correta! ' + current.explanation;
-  } else {
-    elements.feedback.classList.add('quiz-feedback', 'feedback-wrong', 'show');
-    elements.feedback.textContent = 'Resposta incorreta. ' + current.explanation;
-  }
-
-  if (state.currentQuestionIndex < quizQuestions.length - 1) {
-    elements.nextBtn.style.display = 'inline-flex';
-  } else {
-    elements.nextBtn.textContent = 'Finalizar Quiz';
-    elements.nextBtn.style.display = 'inline-flex';
-  }
-}
-
-function nextQuestion() {
-  if (state.currentQuestionIndex < quizQuestions.length - 1) {
-    state.currentQuestionIndex += 1;
-    updateProgress();
-    showQuestion();
-  } else {
-    finishQuiz();
-  }
-}
-
-function updateProgress() {
-  const total = quizQuestions.length;
-  const current = state.currentQuestionIndex + 1;
-
-  elements.counter.innerHTML = `Pergunta <span>${current}</span> de <span>${total}</span>`;
-}
-
-function finishQuiz() {
-  state.completed = true;
-  const total = quizQuestions.length;
-  const score = state.correctAnswers;
-  const percent = Math.round((score / total) * 100);
-  const message = getResultMessage(percent);
-  const ringOffset = 339.292 - (339.292 * percent) / 100;
-
-  elements.quizActive.style.display = 'none';
-  elements.quizResult.style.display = 'block';
-  elements.resultPct.textContent = `${percent}%`;
-  elements.resultTitle.textContent = message.title;
-  elements.resultMsg.textContent = message.description;
-  elements.resultCorrect.textContent = score;
-  elements.resultWrong.textContent = total - score;
-  elements.resultTotal.textContent = total;
-  elements.ringFill.style.strokeDasharray = '339.292';
-  elements.ringFill.style.strokeDashoffset = ringOffset;
-}
-
-function getResultMessage(percent) {
-  if (percent >= 90) {
-    return {
-      title: 'Excelente!',
-      description: 'Você domina bem os fundamentos de segurança digital. Continue reforçando boas práticas.'
-    };
-  }
-  if (percent >= 70) {
-    return {
-      title: 'Bom trabalho',
-      description: 'Você tem uma boa base, mas ainda há algumas áreas para melhorar.'
-    };
-  }
-  if (percent >= 50) {
-    return {
-      title: 'Atenção necessária',
-      description: 'Você entende vários conceitos, mas precisa reforçar práticas essenciais.'
-    };
-  }
-  return {
-    title: 'Vamos melhorar',
-    description: 'Reveja as dicas e tente novamente para fortalecer sua proteção digital.'
-  };
+  renderQuestion();
 }
 
 function restartQuiz() {
-  elements.quizIntro.style.display = 'block';
-  elements.quizResult.style.display = 'none';
-  elements.quizActive.style.display = 'none';
-  elements.nextBtn.textContent = 'Próxima →';
-  state.currentQuestionIndex = 0;
-  state.correctAnswers = 0;
-  state.completed = false;
-  setInitialProgress();
+  startQuiz();
 }
+
+function renderQuestion() {
+  answered = false;
+  const q = quizQuestions[currentQuestion];
+  const total = quizQuestions.length;
+
+
+  document.querySelector('.quiz-progress-bar').style.width =
+    ((currentQuestion / total) * 100) + '%';
+
+
+  document.querySelector('.quiz-counter').innerHTML =
+    `Pergunta <span>${currentQuestion + 1}</span> de <span>${total}</span>`;
+
+
+  document.querySelector('.quiz-question-text').textContent = q.q;
+
+
+  const optContainer = document.querySelector('.quiz-options');
+  optContainer.innerHTML = '';
+  const letters = ['A', 'B', 'C', 'D'];
+
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.classList.add('quiz-option');
+    btn.innerHTML = `<span class="quiz-option-letter">${letters[i]}</span><span>${opt}</span>`;
+    btn.addEventListener('click', () => selectAnswer(i, btn));
+    optContainer.appendChild(btn);
+  });
+
+
+  const feedback = document.querySelector('.quiz-feedback');
+  feedback.className = 'quiz-feedback';
+  feedback.textContent = '';
+
+
+  const nextBtn = document.getElementById('quiz-next-btn');
+  nextBtn.style.display = 'none';
+}
+
+function selectAnswer(index, clickedBtn) {
+  if (answered) return;
+  answered = true;
+
+  const q = quizQuestions[currentQuestion];
+  const allBtns = document.querySelectorAll('.quiz-option');
+  const feedback = document.querySelector('.quiz-feedback');
+
+
+  allBtns.forEach(btn => btn.disabled = true);
+
+
+  allBtns[q.answer].classList.add('correct');
+
+  if (index === q.answer) {
+    score++;
+    feedback.className = 'quiz-feedback feedback-correct show';
+    feedback.innerHTML = `<span>✓</span><span><strong>Correto!</strong> ${q.explanation}</span>`;
+  } else {
+    clickedBtn.classList.add('wrong');
+    feedback.className = 'quiz-feedback feedback-wrong show';
+    feedback.innerHTML = `<span>✗</span><span><strong>Incorreto.</strong> ${q.explanation}</span>`;
+  }
+
+
+  document.getElementById('quiz-next-btn').style.display = 'flex';
+}
+
+function nextQuestion() {
+  currentQuestion++;
+
+  if (currentQuestion >= quizQuestions.length) {
+    showResult();
+  } else {
+    renderQuestion();
+  }
+}
+
+function showResult() {
+  document.querySelector('.quiz-active').style.display = 'none';
+  document.querySelector('.quiz-result').style.display = 'block';
+
+  const total = quizQuestions.length;
+  const pct = Math.round((score / total) * 100);
+  const wrong = total - score;
+
+
+  const circumference = 2 * Math.PI * 54;
+  const ring = document.querySelector('.ring-fill');
+  ring.style.strokeDasharray = circumference;
+  ring.style.strokeDashoffset = circumference;
+
+  setTimeout(() => {
+    ring.style.strokeDashoffset = circumference - (pct / 100) * circumference;
+  }, 100);
+
+
+  const pctEl = document.querySelector('.result-score-pct');
+  let count = 0;
+  const counter = setInterval(() => {
+    count++;
+    pctEl.textContent = count + '%';
+    if (count >= pct) clearInterval(counter);
+  }, 20);
+
+
+  document.querySelector('.num-correct').textContent = score;
+  document.querySelector('.num-wrong').textContent = wrong;
+  document.querySelector('.num-total').textContent = total;
+
+
+  const titleEl = document.querySelector('.result-title');
+  const msgEl = document.querySelector('.result-msg');
+  const color = pct >= 80 ? 'var(--primary)' : pct >= 50 ? '#fbbf24' : 'var(--secondary)';
+
+  ring.style.stroke = color;
+  pctEl.style.color = color;
+
+  if (pct === 100) {
+    titleEl.textContent = '🛡️ Especialista em Segurança!';
+    msgEl.textContent = 'Perfeito! Você domina os conceitos de segurança digital. Continue assim!';
+  } else if (pct >= 80) {
+    titleEl.textContent = '✅ Ótimo Resultado!';
+    msgEl.textContent = 'Você tem um sólido conhecimento sobre segurança digital. Revise os tópicos que errou para ser ainda mais seguro online.';
+  } else if (pct >= 50) {
+    titleEl.textContent = '⚠️ Em Desenvolvimento';
+    msgEl.textContent = 'Você conhece o básico, mas ainda há muito a aprender. Explore nosso conteúdo e refaça o quiz!';
+  } else {
+    titleEl.textContent = '🔓 Vulnerável!';
+    msgEl.textContent = 'Suas práticas digitais precisam melhorar urgentemente. Leia nossas dicas e proteja-se!';
+  }
+}
+
 
 window.nextQuestion = nextQuestion;
 
-document.addEventListener('DOMContentLoaded', initQuiz);
+
+document.addEventListener('DOMContentLoaded', () => {
+  createParticles();
+  initNavbar();
+  initScrollAnimations();
+  initCounters();
+  initQuiz();
+
+
+  const tw = document.querySelector('.hero-typewriter');
+  if (tw) {
+    setTimeout(() => typewriter(tw, 'PROTEJA-SE NO MUNDO DIGITAL', 55), 500);
+  }
+});

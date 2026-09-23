@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Configurações - Site Seguro?</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      max-width: 480px;
+      margin: 40px auto;
+      padding: 0 16px;
+      color: #1a2233;
+    }
+    h1 { font-size: 18px; margin-bottom: 8px; }
+    p { font-size: 13px; color: #555; line-height: 1.5; }
+    label { display: block; margin-top: 16px; font-size: 13px; font-weight: 600; }
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 6px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 13px;
+    }
+    button {
+      margin-top: 16px;
+      padding: 8px 16px;
+      background: #2b3a55;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    #status { margin-top: 10px; font-size: 12px; color: green; }
+  </style>
+</head>
+<body>
+  <h1>🛡️ Configurações — Site Seguro?</h1>
+  <p>
+    Opcionalmente, você pode adicionar sua própria chave da API do
+    <strong>Google Safe Browsing</strong>. Com a chave configurada, toda vez
+    que você abrir o popup a extensão consulta em tempo real a base de
+    ameaças conhecidas do Google (phishing, malware e software indesejado)
+    além das heurísticas locais — se o site estiver na lista, a pontuação
+    cai imediatamente para 0. A chave é gratuita e pode ser obtida no Google
+    Cloud Console. Sem ela, a extensão continua funcionando normalmente
+    usando apenas as heurísticas locais.
+  </p>
+  <label for="apiKey">Chave da API Google Safe Browsing (opcional)</label>
+  <input type="text" id="apiKey" placeholder="Cole sua chave aqui" />
+  <button id="save">Salvar</button>
+  <div id="status"></div>
+
+  <script src="options.js"></script>
+</body>
+</html>
