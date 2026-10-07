@@ -259,7 +259,18 @@ async function verificarSafeBrowsing(urlString, apiKey) {
     );
 
     if (!resposta.ok) {
-      return { verificado: false, erro: true };
+      let dadosErro = {};
+      try {
+        dadosErro = await resposta.json();
+      } catch (erro) {
+        // Respostas de erro podem não incluir um corpo JSON.
+      }
+      return {
+        verificado: false,
+        erro: true,
+        status: resposta.status,
+        mensagem: dadosErro.error && dadosErro.error.message
+      };
     }
 
     const dados = await resposta.json();
@@ -269,8 +280,8 @@ async function verificarSafeBrowsing(urlString, apiKey) {
       malicioso: ameacas.length > 0,
       tipos: ameacas.map(a => a.threatType)
     };
-  } catch (e) {
-    return { verificado: false, erro: true };
+  } catch (erro) {
+    return { verificado: false, erro: true, codigoErro: "rede" };
   }
 }
 

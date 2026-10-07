@@ -56,16 +56,34 @@ async function verificarComSafeBrowsing(tab, resultadoHeuristico) {
   const dadosStorage = await new Promise(resolve =>
     chrome.storage.sync.get(["safeBrowsingApiKey"], resolve)
   );
-  const apiKey = dadosStorage.safeBrowsingApiKey || CHAVE_API_PADRAO;
-  if (!apiKey) return; // sem chave, só a análise local
+  const apiKey = (dadosStorage.safeBrowsingApiKey || "").trim();
+  if (!apiKey) {
+    atualizarStatusSafeBrowsing(
+      "ℹ️ Configure sua chave da API do Google Safe Browsing nas opções.",
+      "erro"
+    );
+    return;
+  }
 
   atualizarStatusSafeBrowsing("🔍 Consultando Google Safe Browsing...", "checando");
 
   const resultadoSB = await verificarSafeBrowsing(tab.url, apiKey);
 
   if (!resultadoSB.verificado) {
+    let mensagem = "Falha de rede ao acessar o Google Safe Browsing.";
+    if (resultadoSB.status === 400) {
+      mensagem = "Requisição rejeitada (HTTP 400). Confira o formato da chamada.";
+    } else if (resultadoSB.status === 403) {
+      mensagem = "Acesso negado (HTTP 403). Confira a chave, se a API está ativada no Google Cloud e as restrições da chave.";
+    } else if (resultadoSB.status === 429) {
+      mensagem = "Limite de consultas excedido (HTTP 429). Confira a quota do projeto Google Cloud.";
+    } else if (resultadoSB.status >= 500) {
+      mensagem = `Serviço do Google indisponível (HTTP ${resultadoSB.status}). Tente novamente mais tarde.`;
+    } else if (resultadoSB.status) {
+      mensagem = `O Google Safe Browsing respondeu com HTTP ${resultadoSB.status}.`;
+    }
     atualizarStatusSafeBrowsing(
-      resultadoSB.erro ? "⚠️ Não foi possível consultar o Safe Browsing agora." : "",
+      `⚠️ ${mensagem}`,
       "erro"
     );
     return;
