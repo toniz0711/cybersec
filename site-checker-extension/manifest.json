@@ -5,17 +5,11 @@
   "description": "Analisa se o site que você está visitando é seguro e confiável: HTTPS, reputação de domínio, typosquatting, sinais de phishing e checagem opcional no Google Safe Browsing.",
   "permissions": [
     "activeTab",
-    "storage",
-    "downloads",
-    "webRequest"
+    "storage"
   ],
   "host_permissions": [
-    "<all_urls>",
     "https://safebrowsing.googleapis.com/*"
   ],
-  "background": {
-    "scripts": ["background.js"]
-  },
   "action": {
     "default_popup": "popup.html",
     "default_icon": {
