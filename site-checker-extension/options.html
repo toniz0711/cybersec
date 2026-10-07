@@ -32,6 +32,11 @@
       cursor: pointer;
     }
     #status { margin-top: 10px; font-size: 12px; color: green; }
+    .monitoramento { margin-top: 28px; padding-top: 16px; border-top: 1px solid #ddd; }
+    .monitoramento label { display: flex; align-items: center; gap: 8px; }
+    .monitoramento input[type="checkbox"] { width: auto; margin: 0; }
+    #eventos { margin-top: 12px; padding-left: 20px; font-size: 12px; overflow-wrap: anywhere; }
+    #eventos li { margin: 8px 0; }
   </style>
 </head>
 <body>
@@ -50,6 +55,22 @@
   <input type="text" id="apiKey" placeholder="Cole sua chave aqui" />
   <button id="save">Salvar</button>
   <div id="status"></div>
+
+  <section class="monitoramento">
+    <h2>Monitoramento local</h2>
+    <p>
+      Quando ativado, registra redirecionamentos de navegação e metadados dos
+      downloads neste navegador. Os dados ficam armazenados localmente; o
+      conteúdo dos arquivos não é lido nem enviado. URLs são salvas sem
+      parâmetros de consulta ou fragmentos.
+    </p>
+    <label for="monitoramentoAtivo">
+      <input type="checkbox" id="monitoramentoAtivo" />
+      Registrar eventos
+    </label>
+    <button id="limparEventos" type="button">Limpar histórico</button>
+    <ol id="eventos" aria-live="polite"></ol>
+  </section>
 
   <script src="options.js"></script>
 </body>
