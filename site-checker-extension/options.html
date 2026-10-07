@@ -38,19 +38,17 @@
   <h1>🛡️ Configurações — Site Seguro?</h1>
   <p>
     Opcionalmente, você pode adicionar sua própria chave da API do
-    <strong>Google Safe Browsing</strong>. Com a chave configurada, toda vez
-    que você abrir o popup a extensão consulta em tempo real a base de
-    ameaças conhecidas do Google (phishing, malware e software indesejado)
-    além das heurísticas locais — se o site estiver na lista, a pontuação
-    cai imediatamente para 0. Configure uma chave válida, com a API ativada
-    no Google Cloud Console. Sem ela, a extensão continua usando apenas as
-    heurísticas locais.
+    <strong>Google Safe Browsing</strong>. Com a chave configurada, a extensão pode
+    consultar a base de ameaças conhecidas do Google, além de fazer a análise local.
+    A consulta é opcional: sem uma chave, a extensão continua funcionando usando
+    apenas as regras locais. A chave não fica gravada no código da extensão.
   </p>
-  <label for="apiKey">Chave da API Google Safe Browsing</label>
+  <label for="apiKey">Chave da API Google Safe Browsing (opcional)</label>
   <input type="text" id="apiKey" placeholder="Cole sua chave aqui" />
   <button id="save">Salvar</button>
   <div id="status"></div>
 
+  <script src="browser-api.js"></script>
   <script src="options.js"></script>
 </body>
 </html>

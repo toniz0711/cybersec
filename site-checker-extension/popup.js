@@ -7,21 +7,24 @@ function corPorNivel(nivel) {
 }
 
 function textoPorNivel(nivel) {
-  if (nivel === "seguro") return "✅ Parece seguro";
-  if (nivel === "atencao") return "⚠️ Atenção necessária";
-  return "🚫 Sinais de risco";
+  if (nivel === "seguro") return "✓ Poucos sinais de risco";
+  if (nivel === "atencao") return "⚠ Atenção necessária";
+  return "✕ Sinais de risco encontrados";
 }
 
-function renderizar(resultadoAnalise) {
-  const { pontuacao, nivel, hostname, resultados } = resultadoAnalise;
+function renderizar(resultado) {
+  const pontuacao = resultado.pontuacao;
+  const nivel = resultado.nivel;
+  const hostname = resultado.hostname;
+  const resultados = resultado.resultados;
 
   document.getElementById("url-display").textContent = hostname || "URL desconhecida";
 
-  const ringFill = document.getElementById("ring-fill");
+  const ring = document.getElementById("ring-fill");
   const offset = CIRCUNFERENCIA - (pontuacao / 100) * CIRCUNFERENCIA;
-  ringFill.style.strokeDasharray = CIRCUNFERENCIA;
-  ringFill.style.strokeDashoffset = offset;
-  ringFill.style.stroke = corPorNivel(nivel);
+  ring.style.strokeDasharray = CIRCUNFERENCIA;
+  ring.style.strokeDashoffset = offset;
+  ring.style.stroke = corPorNivel(nivel);
 
   document.getElementById("score-number").textContent = pontuacao;
 
@@ -29,110 +32,88 @@ function renderizar(resultadoAnalise) {
   badge.textContent = textoPorNivel(nivel);
   badge.className = "badge " + nivel;
 
-  const detailsEl = document.getElementById("details");
-  detailsEl.innerHTML = "";
-  resultados.forEach(r => {
-    const div = document.createElement("div");
-    div.className = "detail-item " + r.tipo;
-    const prefixo = r.tipo === "positivo" ? "✓ " : r.tipo === "negativo" ? "✗ " : "ℹ ";
-    div.textContent = prefixo + r.motivo;
-    detailsEl.appendChild(div);
+  const detalhes = document.getElementById("details");
+  detalhes.innerHTML = "";
+
+  resultados.forEach(function(itemResultado) {
+    const item = document.createElement("div");
+    item.className = "detail-item " + itemResultado.tipo;
+
+    let prefixo = "ℹ ";
+    if (itemResultado.tipo === "positivo") prefixo = "✓ ";
+    if (itemResultado.tipo === "negativo") prefixo = "✕ ";
+
+    item.textContent = prefixo + itemResultado.motivo;
+    detalhes.appendChild(item);
   });
 }
 
 function atualizarStatusSafeBrowsing(texto, tipo) {
-  const el = document.getElementById("sb-status");
-  if (!el) return;
-  el.textContent = texto;
-  el.className = "sb-status" + (tipo ? " " + tipo : "");
+  const elemento = document.getElementById("sb-status");
+  elemento.textContent = texto;
+  elemento.className = "sb-status" + (tipo ? " " + tipo : "");
 }
 
-// se houver chave configurada, confirma no Google Safe Browsing depois da análise local
-async function verificarComSafeBrowsing(tab, resultadoHeuristico) {
-  atualizarStatusSafeBrowsing("", "");
-
+async function verificarComSafeBrowsing(tab, resultadoLocal) {
   if (!tab.url || !/^https?:/i.test(tab.url)) return;
 
-  const dadosStorage = await new Promise(resolve =>
-    chrome.storage.sync.get(["safeBrowsingApiKey"], resolve)
-  );
-  const apiKey = (dadosStorage.safeBrowsingApiKey || "").trim();
-  if (!apiKey) {
-    atualizarStatusSafeBrowsing(
-      "ℹ️ Configure sua chave da API do Google Safe Browsing nas opções.",
-      "erro"
-    );
+  const configuracao = await obterConfiguracao("safeBrowsingApiKey");
+  const apiKey = configuracao.safeBrowsingApiKey || CHAVE_API_PADRAO;
+  if (!apiKey) return;
+
+  atualizarStatusSafeBrowsing("Consultando o Google Safe Browsing...", "checando");
+  const resultado = await verificarSafeBrowsing(tab.url, apiKey);
+
+  if (!resultado.verificado) {
+    atualizarStatusSafeBrowsing("Não foi possível consultar o Safe Browsing agora.", "erro");
     return;
   }
 
-  atualizarStatusSafeBrowsing("🔍 Consultando Google Safe Browsing...", "checando");
+  if (resultado.malicioso) {
+    atualizarStatusSafeBrowsing("Ameaça encontrada na base do Google Safe Browsing.", "malicioso");
 
-  const resultadoSB = await verificarSafeBrowsing(tab.url, apiKey);
-
-  if (!resultadoSB.verificado) {
-    let mensagem = "Falha de rede ao acessar o Google Safe Browsing.";
-    if (resultadoSB.status === 400) {
-      mensagem = "Requisição rejeitada (HTTP 400). Confira o formato da chamada.";
-    } else if (resultadoSB.status === 403) {
-      mensagem = "Acesso negado (HTTP 403). Confira a chave, se a API está ativada no Google Cloud e as restrições da chave.";
-    } else if (resultadoSB.status === 429) {
-      mensagem = "Limite de consultas excedido (HTTP 429). Confira a quota do projeto Google Cloud.";
-    } else if (resultadoSB.status >= 500) {
-      mensagem = `Serviço do Google indisponível (HTTP ${resultadoSB.status}). Tente novamente mais tarde.`;
-    } else if (resultadoSB.status) {
-      mensagem = `O Google Safe Browsing respondeu com HTTP ${resultadoSB.status}.`;
-    }
-    atualizarStatusSafeBrowsing(
-      `⚠️ ${mensagem}`,
-      "erro"
-    );
-    return;
-  }
-
-  if (resultadoSB.malicioso) {
-    atualizarStatusSafeBrowsing("🚨 Ameaça confirmada pelo Google Safe Browsing!", "malicioso");
-    renderizar({
-      ...resultadoHeuristico,
+    const resultadoAtualizado = Object.assign({}, resultadoLocal, {
       pontuacao: 0,
       nivel: "risco",
-      resultados: [
-        {
-          pontos: -100,
-          motivo: `Este site está na lista de ameaças conhecidas do Google Safe Browsing (${resultadoSB.tipos.join(", ")}).`,
-          tipo: "negativo"
-        },
-        ...resultadoHeuristico.resultados
-      ]
+      resultados: [{
+        pontos: -100,
+        motivo: `O endereço aparece em uma lista de ameaças conhecidas (${resultado.tipos.join(", ")}).`,
+        tipo: "negativo"
+      }].concat(resultadoLocal.resultados)
     });
-  } else {
-    atualizarStatusSafeBrowsing("✓ Nenhuma ameaça conhecida (Google Safe Browsing)", "limpo");
-    const pontuacaoAjustada = Math.min(100, resultadoHeuristico.pontuacao + 5);
-    renderizar({
-      ...resultadoHeuristico,
-      pontuacao: pontuacaoAjustada,
-      nivel: pontuacaoAjustada >= 75 ? "seguro" : pontuacaoAjustada >= 45 ? "atencao" : "risco",
-      resultados: [
-        ...resultadoHeuristico.resultados,
-        { pontos: 5, motivo: "Nenhuma ameaça conhecida encontrada na base do Google Safe Browsing.", tipo: "positivo" }
-      ]
-    });
+
+    renderizar(resultadoAtualizado);
+    return;
   }
+
+  atualizarStatusSafeBrowsing("Nenhuma ameaça conhecida foi encontrada.", "limpo");
 }
 
-function rodarAnalise() {
-  atualizarStatusSafeBrowsing("", "");
-  chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
-    const tab = tabs[0];
-    if (!tab || !tab.url) return;
-    const listas = {
-      TRUSTED_DOMAINS, TRUSTED_SUFFIXES, SUSPICIOUS_TLDS, URL_SHORTENERS,
-      PHISHING_KEYWORDS, IMPERSONATED_BRANDS, EXCECOES_TYPOSQUATTING
-    };
-    const resultado = analisarURL(tab.url, listas);
-    renderizar(resultado);
-    verificarComSafeBrowsing(tab, resultado);
-  });
+async function rodarAnalise() {
+  atualizarStatusSafeBrowsing("");
+
+  const abas = await navegador.tabs.query({ active: true, currentWindow: true });
+  const aba = abas[0];
+  if (!aba || !aba.url) return;
+
+  const listas = {
+    TRUSTED_DOMAINS,
+    TRUSTED_SUFFIXES,
+    SUSPICIOUS_TLDS,
+    URL_SHORTENERS,
+    PHISHING_KEYWORDS,
+    IMPERSONATED_BRANDS,
+    EXCECOES_TYPOSQUATTING
+  };
+
+  const resultado = analisarURL(aba.url, listas);
+  renderizar(resultado);
+  await verificarComSafeBrowsing(aba, resultado);
 }
 
 document.addEventListener("DOMContentLoaded", rodarAnalise);
-document.getElementById("rescan")?.addEventListener("click", rodarAnalise);
+
+const botao = document.getElementById("rescan");
+if (botao) {
+  botao.addEventListener("click", rodarAnalise);
+}
