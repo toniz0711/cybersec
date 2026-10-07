@@ -5,6 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Segurança Digital — aprenda a navegar com segurança no mundo digital. Dicas, ameaças, ferramentas e quiz interativo." />
   <title>Segurança Digital — Proteja-se no Mundo Digital</title>
+  <meta name="theme-color" content="#030712" />
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="./favicon.ico" sizes="any" />
+  <link rel="icon" href="./favicon-32.png" type="image/png" sizes="32x32" />
+  <link rel="icon" href="./favicon-16.png" type="image/png" sizes="16x16" />
+  <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Exo+2:wght@300;400;600;700;900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
@@ -23,11 +32,10 @@
       <li><a href="#dicas">Dicas</a></li>
       <li><a href="#ferramentas">Ferramentas</a></li>
       <li><a href="#extensao">Extensão</a></li>
-      <li><a href="MelPraticas.html">Melhores praticas </a></li>
       <li><a href="#quiz">Quiz</a></li>
     </ul>
     <a href="#quiz" class="nav-cta">Iniciar Quiz</a>
-    <button class="hamburger" aria-label="Menu">
+    <button class="hamburger" aria-label="Abrir menu" aria-expanded="false">
       <span></span><span></span><span></span>
     </button>
   </nav>
@@ -37,7 +45,7 @@
     <div class="hero-grid"></div>
     <div class="particles"></div>
     <div class="hero-content">
-      <span class="hero-badge">SISTEMA DE DEFESA DIGITAL ATIVO</span>
+      <span class="hero-badge">SEGURANÇA DIGITAL</span>
       <h1>
         <span class="hero-typewriter">PROTEJA-SE NO MUNDO DIGITAL</span><br />
         <span class="accent-red">// SEM RISCOS</span>
@@ -52,12 +60,24 @@
         <a href="#quiz" class="btn-primary">Testar Conhecimento</a>
         <a href="#dicas" class="btn-secondary">Ver Dicas</a>
       </div>
-      
-      <div class="map" id="Mapa">
-        
-      <iframe width="640" height="640" src="https://cybermap.kaspersky.com/pt/widget/dynamic/dark" frameborder="0"></iframe>
-      <h2>Mapa de ameaças digitais ao redor do mundo </h2>
-     </div>
+      <div class="hero-stats">
+        <div class="stat">
+          <div class="stat-number" data-counter="12195" data-suffix="">0</div>
+          <div class="stat-label">Violações de dados confirmadas e analisadas em 2025*</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number" data-counter="60" data-suffix="%">0</div>
+          <div class="stat-label">Violações com envolvimento humano*</div>
+        </div>
+        <div class="stat">
+          <div class="stat-number" data-counter="10" data-suffix="">0</div>
+          <div class="stat-label">Perguntas no quiz</div>
+        </div>
+      </div>
+      <p class="stats-fonte">
+        * Fonte: <a href="https://www.verizon.com/business/resources/reports/dbir/" target="_blank" rel="noopener">Verizon, Data Breach Investigations Report 2025</a>.
+      </p>
+    </div>
   </section>
 
   <section id="ameacas">
@@ -158,12 +178,11 @@
             </div>
           </div>
           <div class="tip-item animate-up">
-             <div class="tip-number">03</div>
+            <div class="tip-number">03</div>
             <div class="tip-content">
               <h4>Desconfie de links suspeitos</h4>
               <p>Nunca clique em links de e-mails ou SMS pedindo dados urgentes. Acesse o site oficial diretamente.</p>
             </div>
-        
           </div>
           <div class="tip-item animate-up">
             <div class="tip-number">04</div>
@@ -235,12 +254,12 @@
         <div class="tool-card animate-up">
           <span class="tool-emoji">🧅</span>
           <h4>Tor Browser</h4>
-          <p>Anonimato total para navegação em casos de necessidade extrema.</p>
+          <p>Navegador que encaminha o tráfego por vários servidores para dificultar o rastreio.</p>
         </div>
         <div class="tool-card animate-up">
           <span class="tool-emoji">💾</span>
           <h4>VeraCrypt</h4>
-          <p>Criptografia de discos e arquivos sensíveis com padrão militar.</p>
+          <p>Criptografia de discos e arquivos sensíveis, gratuita e de código aberto.</p>
         </div>
       </div>
     </div>
@@ -320,9 +339,6 @@
               <li>Ative o <strong>"Modo do desenvolvedor"</strong> (canto superior direito).</li>
               <li>Clique em <strong>"Carregar sem compactação"</strong> e selecione a pasta extraída.</li>
               <li>Pronto! O ícone do escudo aparecerá na barra de extensões.</li>
-
-
-              <li><strong>Dependendo do navegador você precisara seguir outra tutorial de como ativar a extensão  </strong></li>
             </ol>
           </div>
         </div>
@@ -364,7 +380,7 @@
             <div class="quiz-feedback"></div>
           </div>
           <div class="quiz-nav">
-            <button id="quiz-next-btn" class="btn-primary" onclick="nextQuestion()" style="display:none;">
+            <button id="quiz-next-btn" class="btn-primary" style="display:none;">
               Próxima →
             </button>
           </div>
@@ -424,7 +440,6 @@
           <li><a href="#dicas">Dicas</a></li>
           <li><a href="#ferramentas">Ferramentas</a></li>
           <li><a href="#extensao">Extensão</a></li>
-          <li><a href="MelPraticas.html">Melhores praticas</a></li>
           <li><a href="#quiz">Quiz</a></li>
         </ul>
       </div>
@@ -434,16 +449,14 @@
           <li><a href="./site-checker-extension.zip" download>Baixar Extensão</a></li>
           <li><a href="https://haveibeenpwned.com" target="_blank" rel="noopener">Have I Been Pwned</a></li>
           <li><a href="https://bitwarden.com" target="_blank" rel="noopener">Bitwarden</a></li>
-          <li><a href="https://protonmail.com" target="_blank" rel="noopener">Proton Mail</a></li>
+          <li><a href="https://proton.me/mail" target="_blank" rel="noopener">Proton Mail</a></li>
           <li><a href="https://www.cert.br" target="_blank" rel="noopener">CERT.br</a></li>
-         <li><a href="https://owasp.org" target="_blank" rel="noopener">OWASP</a></li>      
-         <li><a href="https://new.safernet.org.br" target="_blank" rel="noopener"> Safernet</a></li> 
         </ul>
       </div>
     </div>
     <div class="footer-bottom">
       <span>© 2026 SEC//URE</span>
-      <span>// Stay safe. Stay private.</span>
+      <span>// Navegue seguro. Proteja sua privacidade.</span>
     </div>
   </footer>
   <script src="./main.js"></script>

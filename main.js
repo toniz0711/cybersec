@@ -1,121 +1,103 @@
-
+// partículas do hero
 function createParticles() {
   const container = document.querySelector('.particles');
   if (!container) return;
 
   for (let i = 0; i < 30; i++) {
     const p = document.createElement('div');
-    p.classList.add('particle');
+    const tamanho = Math.random() * 3 + 1;
+    p.className = 'particle';
     p.style.left = Math.random() * 100 + '%';
-    p.style.animationDuration = (8 + Math.random() * 15) + 's';
-    p.style.animationDelay = (Math.random() * 10) + 's';
-    p.style.width = p.style.height = (Math.random() * 3 + 1) + 'px';
-    p.style.opacity = Math.random() * 0.6;
+    p.style.animationDuration = 8 + Math.random() * 15 + 's';
+    p.style.animationDelay = Math.random() * 10 + 's';
+    p.style.width = p.style.height = tamanho + 'px';
     container.appendChild(p);
   }
 }
-
 
 function initNavbar() {
   const navbar = document.querySelector('.navbar');
   const hamburger = document.querySelector('.hamburger');
   const navLinks = document.querySelector('.nav-links');
+  const links = document.querySelectorAll('.nav-links a');
+  const sections = document.querySelectorAll('section[id]');
 
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 50) {
-      navbar.style.background = 'rgba(3,7,18,0.97)';
-    } else {
-      navbar.style.background = 'rgba(3,7,18,0.85)';
-    }
-  });
-
-  if (hamburger && navLinks) {
-    hamburger.addEventListener('click', () => {
-      navLinks.classList.toggle('open');
-    });
+  function fecharMenu() {
+    navLinks.classList.remove('open');
+    hamburger.setAttribute('aria-expanded', 'false');
   }
 
-
-  const sections = document.querySelectorAll('section[id]');
-  const links = document.querySelectorAll('.nav-links a');
+  hamburger.addEventListener('click', () => {
+    const aberto = navLinks.classList.toggle('open');
+    hamburger.setAttribute('aria-expanded', aberto);
+  });
+  links.forEach(l => l.addEventListener('click', fecharMenu));
 
   window.addEventListener('scroll', () => {
-    let current = '';
+    navbar.style.background = window.scrollY > 50
+      ? 'rgba(3,7,18,0.97)'
+      : 'rgba(3,7,18,0.85)';
+
+    // marca no menu a seção que está na tela
+    let atual = '';
     sections.forEach(sec => {
-      if (window.scrollY >= sec.offsetTop - 120) {
-        current = sec.getAttribute('id');
-      }
+      if (window.scrollY >= sec.offsetTop - 120) atual = sec.id;
     });
     links.forEach(link => {
-      link.classList.remove('active');
-      if (link.getAttribute('href') === '#' + current) {
-        link.classList.add('active');
-      }
+      link.classList.toggle('active', link.getAttribute('href') === '#' + atual);
     });
   });
 }
 
-
 function initScrollAnimations() {
-  const elements = document.querySelectorAll('.animate-up');
-
   const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry, index) => {
-      if (entry.isIntersecting) {
-        setTimeout(() => {
-          entry.target.classList.add('visible');
-        }, index * 80);
-        observer.unobserve(entry.target);
-      }
+    entries.forEach((entry, i) => {
+      if (!entry.isIntersecting) return;
+      setTimeout(() => entry.target.classList.add('visible'), i * 80);
+      observer.unobserve(entry.target);
     });
   }, { threshold: 0.1 });
 
-  elements.forEach(el => observer.observe(el));
+  document.querySelectorAll('.animate-up').forEach(el => observer.observe(el));
 }
 
-
-function typewriter(el, text, speed = 60) {
-  el.textContent = '';
+function typewriter(el, texto, velocidade = 60) {
   let i = 0;
+  el.textContent = '';
   const timer = setInterval(() => {
-    el.textContent += text[i];
-    i++;
-    if (i >= text.length) clearInterval(timer);
-  }, speed);
+    el.textContent += texto[i++];
+    if (i >= texto.length) clearInterval(timer);
+  }, velocidade);
 }
 
+function animateCounter(el, alvo, sufixo = '') {
+  const duracao = 2000;
+  let inicio = null;
 
-function animateCounter(el, target, suffix = '') {
-  let start = 0;
-  const duration = 2000;
-  const step = (timestamp) => {
-    if (!start) start = timestamp;
-    const progress = Math.min((timestamp - start) / duration, 1);
-    const eased = 1 - Math.pow(1 - progress, 3);
-    el.textContent = Math.floor(eased * target) + suffix;
-    if (progress < 1) requestAnimationFrame(step);
-  };
-  requestAnimationFrame(step);
+  function passo(agora) {
+    if (!inicio) inicio = agora;
+    const progresso = Math.min((agora - inicio) / duracao, 1);
+    const suave = 1 - Math.pow(1 - progresso, 3);
+    el.textContent = Math.floor(suave * alvo) + sufixo;
+    if (progresso < 1) requestAnimationFrame(passo);
+  }
+  requestAnimationFrame(passo);
 }
 
 function initCounters() {
-  const counters = document.querySelectorAll('[data-counter]');
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const el = entry.target;
-        const target = parseInt(el.dataset.counter);
-        const suffix = el.dataset.suffix || '';
-        animateCounter(el, target, suffix);
-        observer.unobserve(el);
-      }
+      if (!entry.isIntersecting) return;
+      const el = entry.target;
+      animateCounter(el, parseInt(el.dataset.counter, 10), el.dataset.suffix || '');
+      observer.unobserve(el);
     });
   }, { threshold: 0.5 });
 
-  counters.forEach(el => observer.observe(el));
+  document.querySelectorAll('[data-counter]').forEach(el => observer.observe(el));
 }
 
-
+// ---------- quiz ----------
 
 const quizQuestions = [
   {
@@ -233,24 +215,26 @@ const quizQuestions = [
 let currentQuestion = 0;
 let score = 0;
 let answered = false;
+let ordem = []; // índices das opções embaralhadas da pergunta atual
+
+function embaralhar(lista) {
+  const a = [...lista];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
 
 function initQuiz() {
-  const startBtn = document.getElementById('quiz-start-btn');
-  const restartBtn = document.getElementById('quiz-restart-btn');
-
-  if (startBtn) {
-    startBtn.addEventListener('click', startQuiz);
-  }
-
-  if (restartBtn) {
-    restartBtn.addEventListener('click', restartQuiz);
-  }
+  document.getElementById('quiz-start-btn').addEventListener('click', startQuiz);
+  document.getElementById('quiz-restart-btn').addEventListener('click', startQuiz);
+  document.getElementById('quiz-next-btn').addEventListener('click', nextQuestion);
 }
 
 function startQuiz() {
   currentQuestion = 0;
   score = 0;
-  answered = false;
 
   document.querySelector('.quiz-intro').style.display = 'none';
   document.querySelector('.quiz-result').style.display = 'none';
@@ -259,80 +243,69 @@ function startQuiz() {
   renderQuestion();
 }
 
-function restartQuiz() {
-  startQuiz();
-}
-
 function renderQuestion() {
-  answered = false;
   const q = quizQuestions[currentQuestion];
   const total = quizQuestions.length;
+  const letras = ['A', 'B', 'C', 'D'];
+  const container = document.querySelector('.quiz-options');
+  const feedback = document.querySelector('.quiz-feedback');
 
+  answered = false;
+  ordem = embaralhar(q.options.map((_, i) => i));
 
-  document.querySelector('.quiz-progress-bar').style.width =
-    ((currentQuestion / total) * 100) + '%';
-
-
+  document.querySelector('.quiz-progress-bar').style.width = (currentQuestion / total) * 100 + '%';
   document.querySelector('.quiz-counter').innerHTML =
     `Pergunta <span>${currentQuestion + 1}</span> de <span>${total}</span>`;
-
-
   document.querySelector('.quiz-question-text').textContent = q.q;
 
-
-  const optContainer = document.querySelector('.quiz-options');
-  optContainer.innerHTML = '';
-  const letters = ['A', 'B', 'C', 'D'];
-
-  q.options.forEach((opt, i) => {
+  container.innerHTML = '';
+  ordem.forEach((indiceOriginal, pos) => {
     const btn = document.createElement('button');
-    btn.classList.add('quiz-option');
-    btn.innerHTML = `<span class="quiz-option-letter">${letters[i]}</span><span>${opt}</span>`;
-    btn.addEventListener('click', () => selectAnswer(i, btn));
-    optContainer.appendChild(btn);
+    const letra = document.createElement('span');
+    const texto = document.createElement('span');
+
+    btn.className = 'quiz-option';
+    letra.className = 'quiz-option-letter';
+    letra.textContent = letras[pos];
+    texto.textContent = q.options[indiceOriginal];
+    btn.append(letra, texto);
+
+    btn.addEventListener('click', () => selectAnswer(indiceOriginal, btn));
+    container.appendChild(btn);
   });
 
-
-  const feedback = document.querySelector('.quiz-feedback');
   feedback.className = 'quiz-feedback';
   feedback.textContent = '';
-
-
-  const nextBtn = document.getElementById('quiz-next-btn');
-  nextBtn.style.display = 'none';
+  document.getElementById('quiz-next-btn').style.display = 'none';
 }
 
-function selectAnswer(index, clickedBtn) {
+function selectAnswer(escolhida, btnClicado) {
   if (answered) return;
   answered = true;
 
   const q = quizQuestions[currentQuestion];
-  const allBtns = document.querySelectorAll('.quiz-option');
+  const botoes = document.querySelectorAll('.quiz-option');
   const feedback = document.querySelector('.quiz-feedback');
+  const acertou = escolhida === q.answer;
 
+  botoes.forEach(b => (b.disabled = true));
+  botoes[ordem.indexOf(q.answer)].classList.add('correct');
 
-  allBtns.forEach(btn => btn.disabled = true);
-
-
-  allBtns[q.answer].classList.add('correct');
-
-  if (index === q.answer) {
+  if (acertou) {
     score++;
     feedback.className = 'quiz-feedback feedback-correct show';
     feedback.innerHTML = `<span>✓</span><span><strong>Correto!</strong> ${q.explanation}</span>`;
   } else {
-    clickedBtn.classList.add('wrong');
+    btnClicado.classList.add('wrong');
     feedback.className = 'quiz-feedback feedback-wrong show';
     feedback.innerHTML = `<span>✗</span><span><strong>Incorreto.</strong> ${q.explanation}</span>`;
   }
-
 
   document.getElementById('quiz-next-btn').style.display = 'flex';
 }
 
 function nextQuestion() {
   currentQuestion++;
-
   if (currentQuestion >= quizQuestions.length) {
     showResult();
   } else {
@@ -341,63 +314,56 @@ function nextQuestion() {
 }
 
 function showResult() {
-  document.querySelector('.quiz-active').style.display = 'none';
-  document.querySelector('.quiz-result').style.display = 'block';
-
   const total = quizQuestions.length;
   const pct = Math.round((score / total) * 100);
-  const wrong = total - score;
-
-
-  const circumference = 2 * Math.PI * 54;
   const ring = document.querySelector('.ring-fill');
-  ring.style.strokeDasharray = circumference;
-  ring.style.strokeDashoffset = circumference;
+  const pctEl = document.querySelector('.result-score-pct');
+  const titulo = document.querySelector('.result-title');
+  const msg = document.querySelector('.result-msg');
+  const circunferencia = 2 * Math.PI * 54;
+  const cor = pct >= 80 ? 'var(--primary)' : pct >= 50 ? '#fbbf24' : 'var(--secondary)';
 
+  document.querySelector('.quiz-active').style.display = 'none';
+  document.querySelector('.quiz-result').style.display = 'block';
+  document.querySelector('.quiz-progress-bar').style.width = '100%';
+
+  ring.style.strokeDasharray = circunferencia;
+  ring.style.strokeDashoffset = circunferencia;
+  ring.style.stroke = cor;
+  pctEl.style.color = cor;
   setTimeout(() => {
-    ring.style.strokeDashoffset = circumference - (pct / 100) * circumference;
+    ring.style.strokeDashoffset = circunferencia - (pct / 100) * circunferencia;
   }, 100);
 
-
-  const pctEl = document.querySelector('.result-score-pct');
-  let count = 0;
-  const counter = setInterval(() => {
-    count++;
-    pctEl.textContent = count + '%';
-    if (count >= pct) clearInterval(counter);
-  }, 20);
-
+  // contagem da porcentagem (começa em 0 para não mostrar 1% quando errou tudo)
+  let n = 0;
+  pctEl.textContent = '0%';
+  if (pct > 0) {
+    const contador = setInterval(() => {
+      n++;
+      pctEl.textContent = n + '%';
+      if (n >= pct) clearInterval(contador);
+    }, 20);
+  }
 
   document.querySelector('.num-correct').textContent = score;
-  document.querySelector('.num-wrong').textContent = wrong;
+  document.querySelector('.num-wrong').textContent = total - score;
   document.querySelector('.num-total').textContent = total;
 
-
-  const titleEl = document.querySelector('.result-title');
-  const msgEl = document.querySelector('.result-msg');
-  const color = pct >= 80 ? 'var(--primary)' : pct >= 50 ? '#fbbf24' : 'var(--secondary)';
-
-  ring.style.stroke = color;
-  pctEl.style.color = color;
-
   if (pct === 100) {
-    titleEl.textContent = '🛡️ Especialista em Segurança!';
-    msgEl.textContent = 'Perfeito! Você domina os conceitos de segurança digital. Continue assim!';
+    titulo.textContent = '🛡️ Especialista em Segurança!';
+    msg.textContent = 'Perfeito! Você domina os conceitos de segurança digital. Continue assim!';
   } else if (pct >= 80) {
-    titleEl.textContent = '✅ Ótimo Resultado!';
-    msgEl.textContent = 'Você tem um sólido conhecimento sobre segurança digital. Revise os tópicos que errou para ser ainda mais seguro online.';
+    titulo.textContent = '✅ Ótimo Resultado!';
+    msg.textContent = 'Você tem um bom conhecimento sobre segurança digital. Revise os tópicos que errou para ficar ainda mais seguro online.';
   } else if (pct >= 50) {
-    titleEl.textContent = '⚠️ Em Desenvolvimento';
-    msgEl.textContent = 'Você conhece o básico, mas ainda há muito a aprender. Explore nosso conteúdo e refaça o quiz!';
+    titulo.textContent = '⚠️ Em Desenvolvimento';
+    msg.textContent = 'Você conhece o básico, mas ainda há o que aprender. Explore o conteúdo do site e refaça o quiz!';
   } else {
-    titleEl.textContent = '🔓 Vulnerável!';
-    msgEl.textContent = 'Suas práticas digitais precisam melhorar urgentemente. Leia nossas dicas e proteja-se!';
+    titulo.textContent = '🔓 Vulnerável!';
+    msg.textContent = 'Suas práticas digitais precisam melhorar. Leia as dicas e proteja-se!';
   }
 }
-
-
-window.nextQuestion = nextQuestion;
-
 
 document.addEventListener('DOMContentLoaded', () => {
   createParticles();
@@ -406,9 +372,9 @@ document.addEventListener('DOMContentLoaded', () => {
   initCounters();
   initQuiz();
 
-
-  const tw = document.querySelector('.hero-typewriter');
-  if (tw) {
-    setTimeout(() => typewriter(tw, 'PROTEJA-SE NO MUNDO DIGITAL', 55), 500);
+  const titulo = document.querySelector('.hero-typewriter');
+  if (titulo) {
+    const texto = titulo.textContent;
+    setTimeout(() => typewriter(titulo, texto, 55), 500);
   }
 });
