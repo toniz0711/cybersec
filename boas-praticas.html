@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Boas Práticas de Segurança Digital | SEC//URE</title>
+  <meta name="description" content="Boas práticas de segurança digital com referências do CERT.br, NIST, CISA e Verizon." />
+  <meta name="theme-color" content="#030712" />
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="./favicon.ico" sizes="any" />
+  <link rel="icon" href="./favicon-32.png" type="image/png" sizes="32x32" />
+  <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Exo+2:wght@300;400;600;700;900&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./style.css" />
+</head>
+<body>
+  <nav class="navbar">
+    <a href="index.html#home" class="nav-logo">
+      <svg class="shield-icon" viewBox="0 0 24 24"><path d="M12 2 L4 5 V11 C4 16 7.5 20.5 12 22 C16.5 20.5 20 16 20 11 V5 L12 2 Z" /></svg>
+      <span>SEC//URE</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html#home">Home</a></li>
+      <li><a href="index.html#ameacas">Ameaças</a></li>
+      <li><a href="index.html#dicas">Dicas</a></li>
+      <li><a href="boas-praticas.html" class="active">Boas Práticas</a></li>
+      <li><a href="index.html#ferramentas">Ferramentas</a></li>
+      <li><a href="index.html#extensao">Extensão</a></li>
+      <li><a href="index.html#quiz">Quiz</a></li>
+    </ul>
+    <a href="index.html#quiz" class="nav-cta">Iniciar Quiz</a>
+    <button class="hamburger" aria-label="Abrir menu" aria-expanded="false"><span></span><span></span><span></span></button>
+  </nav>
+
+  <main>
+    <section class="pagina-topo">
+      <div class="container">
+        <div class="section-header animate-up">
+          <span class="section-tag">// Boas práticas</span>
+          <h1 class="section-title">Boas práticas de <span>segurança digital</span></h1>
+          <div class="divider"></div>
+          <p class="section-subtitle">Seis hábitos baseados em órgãos e instituições de referência. Cada prática traz a fonte para você conferir.</p>
+        </div>
+
+        <div class="praticas">
+          <article class="pratica animate-up" id="senhas">
+            <span class="pratica-num">01</span>
+            <h2>Senhas longas e únicas</h2>
+            <p>Uma senha para cada conta, longa e sem relação com dados pessoais. A CISA recomenda ao menos 16 caracteres, aleatórios e únicos, guardados em um gerenciador de senhas. O NIST, na revisão de 2025 do seu guia de autenticação, dá mais peso ao tamanho do que a regras de símbolos e desaconselha trocas periódicas sem indício de vazamento.</p>
+            <p class="fonte">Fontes: <a href="https://www.cisa.gov/secure-our-world" target="_blank" rel="noopener">CISA, Secure Our World</a> · <a href="https://csrc.nist.gov/pubs/sp/800/63/b/4/final" target="_blank" rel="noopener">NIST SP 800-63B-4</a> · <a href="https://cartilha.cert.br/" target="_blank" rel="noopener">CERT.br, Cartilha (fascículo Senhas)</a></p>
+          </article>
+
+          <article class="pratica animate-up" id="autenticacao">
+            <span class="pratica-num">02</span>
+            <h2>Verificação em duas etapas</h2>
+            <p>Ative a autenticação multifator em todo serviço que oferecer, principalmente e-mail, bancos e redes sociais. Com ela, uma senha vazada sozinha não basta para invadir a conta.</p>
+            <p class="fonte">Fonte: <a href="https://www.cisa.gov/secure-our-world" target="_blank" rel="noopener">CISA, Secure Our World</a></p>
+          </article>
+
+          <article class="pratica animate-up" id="phishing">
+            <span class="pratica-num">03</span>
+            <h2>Reconheça e denuncie phishing</h2>
+            <p>Mensagens com linguagem alarmante, urgência ou ofertas boas demais merecem desconfiança. Não clique nem responda: apague e, quando possível, denuncie. Acessar o site oficial digitando o endereço é mais seguro do que usar o link recebido. O relatório da Verizon de 2025 aponta o fator humano em cerca de 60% das violações analisadas, o que mostra por que esse hábito importa.</p>
+            <p class="fonte">Fontes: <a href="https://www.cisa.gov/sites/default/files/2024-09/Secure-Our-World-4-Easy-Ways-Stay-Safe-Online-Tip-Sheet.pdf" target="_blank" rel="noopener">CISA, folha de dicas (PDF)</a> · <a href="https://www.verizon.com/business/pt-br/resources/reports/dbir/" target="_blank" rel="noopener">Verizon, DBIR 2025</a></p>
+          </article>
+
+          <article class="pratica animate-up" id="atualizacoes">
+            <span class="pratica-num">04</span>
+            <h2>Mantenha tudo atualizado</h2>
+            <p>As atualizações corrigem falhas de segurança conhecidas. Ligue as atualizações automáticas no sistema, no navegador e nos aplicativos.</p>
+            <p class="fonte">Fonte: <a href="https://www.cisa.gov/secure-our-world" target="_blank" rel="noopener">CISA, Secure Our World</a></p>
+          </article>
+
+          <article class="pratica animate-up" id="navegacao">
+            <span class="pratica-num">05</span>
+            <h2>Confira o endereço antes de digitar dados</h2>
+            <p>Olhe o domínio com atenção: golpistas trocam letras por números ou acrescentam palavras como "login" e "seguranca". Navegadores usam o Google Safe Browsing, uma lista de endereços inseguros, para alertar sobre sites perigosos, e a extensão deste projeto faz uma análise local do endereço além dessa consulta opcional (<a href="index.html#chave-api">veja como ativá-la com a sua própria chave</a>).</p>
+            <p class="fonte">Fontes: <a href="https://developers.google.com/safe-browsing/" target="_blank" rel="noopener">Google, Safe Browsing</a> · <a href="https://cartilha.cert.br/" target="_blank" rel="noopener">CERT.br, Cartilha de Segurança para Internet</a></p>
+          </article>
+
+          <article class="pratica animate-up" id="redes-sociais">
+            <span class="pratica-num">06</span>
+            <h2>Cuide da privacidade nas redes sociais</h2>
+            <p>Configure o que cada pessoa pode ver, pense antes de publicar e leia os termos antes de liberar acesso a aplicativos de terceiros, como jogos e testes de personalidade, que podem coletar fotos e contatos.</p>
+            <p class="fonte">Fonte: <a href="https://cartilha.cert.br/" target="_blank" rel="noopener">CERT.br, Cartilha (fascículo Redes Sociais)</a></p>
+          </article>
+        </div>
+
+        <div class="refs animate-up" id="referencias">
+          <h2>Referências</h2>
+          <ol>
+            <li>CERT.br / NIC.br. <em>Cartilha de Segurança para Internet</em>. <a href="https://cartilha.cert.br/" target="_blank" rel="noopener">cartilha.cert.br</a></li>
+            <li>NIST. <em>SP 800-63B-4: Digital Identity Guidelines, Authentication and Authenticator Management</em>, 2025. <a href="https://doi.org/10.6028/NIST.SP.800-63B-4" target="_blank" rel="noopener">doi.org/10.6028/NIST.SP.800-63B-4</a></li>
+            <li>CISA. <em>Secure Our World</em>. <a href="https://www.cisa.gov/secure-our-world" target="_blank" rel="noopener">cisa.gov/secure-our-world</a></li>
+            <li>CISA. <em>4 Easy Ways to Stay Safe Online</em> (folha de dicas). <a href="https://www.cisa.gov/sites/default/files/2024-09/Secure-Our-World-4-Easy-Ways-Stay-Safe-Online-Tip-Sheet.pdf" target="_blank" rel="noopener">PDF</a></li>
+            <li>Verizon. <em>2025 Data Breach Investigations Report</em>. <a href="https://www.verizon.com/business/pt-br/resources/reports/dbir/" target="_blank" rel="noopener">verizon.com</a></li>
+            <li>Have I Been Pwned. <em>API v3, lista de vazamentos</em> (dados do início do site). <a href="https://haveibeenpwned.com/API/v3" target="_blank" rel="noopener">haveibeenpwned.com/API/v3</a></li>
+            <li>Google. <em>Safe Browsing</em>. <a href="https://developers.google.com/safe-browsing/" target="_blank" rel="noopener">developers.google.com/safe-browsing</a></li>
+          </ol>
+          <p><a href="index.html#dicas" class="btn-secondary">Voltar às dicas</a></p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-bottom">
+      <span>© 2026 SEC//URE</span>
+      <a href="index.html#home">Voltar ao início</a>
+    </div>
+  </footer>
+  <script src="./main.js"></script>
+</body>
+</html>

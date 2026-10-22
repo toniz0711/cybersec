@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Segurança Digital — aprenda a navegar com segurança no mundo digital. Dicas, ameaças, ferramentas e quiz interativo." />
-  <title>Segurança Digital — Proteja-se no Mundo Digital</title>
+  <meta name="description" content="Segurança Digital - aprenda a navegar com segurança no mundo digital. Dicas, ameaças, ferramentas e quiz interativo." />
+  <title>Segurança Digital - Proteja-se no Mundo Digital</title>
   <meta name="theme-color" content="#030712" />
   <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
   <link rel="icon" href="./favicon.ico" sizes="any" />
@@ -18,6 +18,7 @@
 </head>
 <body>
 
+  <!-- Menu do topo -->
   <nav class="navbar">
     <a href="#home" class="nav-logo">
       <svg class="shield-icon" viewBox="0 0 24 24">
@@ -30,6 +31,7 @@
       <li><a href="#home">Home</a></li>
       <li><a href="#ameacas">Ameaças</a></li>
       <li><a href="#dicas">Dicas</a></li>
+      <li><a href="boas-praticas.html">Boas Práticas</a></li>
       <li><a href="#ferramentas">Ferramentas</a></li>
       <li><a href="#extensao">Extensão</a></li>
       <li><a href="#quiz">Quiz</a></li>
@@ -39,6 +41,8 @@
       <span></span><span></span><span></span>
     </button>
   </nav>
+
+  <!-- Início: título, números atualizados pela API e botões -->
 
   <section class="hero" id="home">
     <div class="hero-bg"></div>
@@ -62,28 +66,33 @@
       </div>
       <div class="hero-stats">
         <div class="stat">
-          <div class="stat-number" data-counter="12195" data-suffix="">0</div>
-          <div class="stat-label">Violações de dados confirmadas e analisadas em 2025*</div>
+          <div class="stat-number" id="stat-vazamentos">...</div>
+          <div class="stat-label">Vazamentos de dados registrados</div>
         </div>
         <div class="stat">
-          <div class="stat-number" data-counter="60" data-suffix="%">0</div>
-          <div class="stat-label">Violações com envolvimento humano*</div>
+          <div class="stat-number" id="stat-contas">...</div>
+          <div class="stat-label">Contas expostas nesses vazamentos</div>
         </div>
         <div class="stat">
-          <div class="stat-number" data-counter="10" data-suffix="">0</div>
+          <div class="stat-number" id="stat-quiz">0</div>
           <div class="stat-label">Perguntas no quiz</div>
         </div>
       </div>
       <p class="stats-fonte">
-        * Fonte: <a href="https://www.verizon.com/business/resources/reports/dbir/" target="_blank" rel="noopener">Verizon, Data Breach Investigations Report 2025</a>.
+        <span id="ultimo-vazamento"></span>
+        Dados da API do <a href="https://haveibeenpwned.com" target="_blank" rel="noopener">Have I Been Pwned</a>,
+        atualizados automaticamente (licença CC BY 4.0).
+        <a href="boas-praticas.html#referencias">Ver todas as fontes</a>.
       </p>
     </div>
   </section>
 
+  <!-- Ameaças: principais golpes e ataques -->
+
   <section id="ameacas">
     <div class="container">
       <div class="section-header animate-up">
-        <span class="section-tag">// 01 — Ameaças</span>
+        <span class="section-tag">// 01 - Ameaças</span>
         <h2 class="section-title">Principais <span>perigos online</span></h2>
         <div class="divider"></div>
         <p class="section-subtitle">
@@ -131,10 +140,12 @@
     </div>
   </section>
 
+  <!-- Dicas: hábitos simples de segurança -->
+
   <section id="dicas">
     <div class="container">
       <div class="section-header animate-up">
-        <span class="section-tag">// 02 — Boas práticas</span>
+        <span class="section-tag">// 02 - Boas práticas</span>
         <h2 class="section-title">Dicas <span>essenciais</span></h2>
         <div class="divider"></div>
         <p class="section-subtitle">
@@ -207,13 +218,18 @@
           </div>
         </div>
       </div>
+      <p class="animate-up" style="text-align:center;margin-top:2.5rem;">
+        <a href="boas-praticas.html" class="btn-secondary">Ver todas as boas práticas e fontes</a>
+      </p>
     </div>
   </section>
+
+  <!-- Ferramentas recomendadas -->
 
   <section id="ferramentas">
     <div class="container">
       <div class="section-header animate-up">
-        <span class="section-tag">// 03 — Arsenal</span>
+        <span class="section-tag">// 03 - Arsenal</span>
         <h2 class="section-title">Ferramentas <span>recomendadas</span></h2>
         <div class="divider"></div>
         <p class="section-subtitle">
@@ -265,10 +281,12 @@
     </div>
   </section>
 
+  <!-- Extensão Site Seguro: download, instalação e como usar a chave de API -->
+
   <section id="extensao">
     <div class="container">
       <div class="section-header animate-up">
-        <span class="section-tag">// 04 — Extensão</span>
+        <span class="section-tag">// 04 - Extensão</span>
         <h2 class="section-title">Extensão <span>Site Seguro?</span></h2>
         <div class="divider"></div>
         <p class="section-subtitle">
@@ -311,20 +329,22 @@
         <div class="extension-info">
           <h3>Analise qualquer site em segundos</h3>
           <p class="extension-desc">
-            A extensão <strong>"Site Seguro?"</strong> roda 100% localmente no seu
-            navegador — sem enviar seus dados de navegação para nenhum servidor.
-            Ela calcula uma pontuação de 0 a 100 usando as mesmas heurísticas de
-            segurança que você aprendeu aqui: HTTPS, reputação de domínio, uso de
-            endereço IP, punycode, TLDs suspeitos, encurtadores de link e padrões
-            comuns de phishing.
+            A extensão <strong>"Site Seguro?"</strong> analisa o endereço da página no
+            próprio navegador e calcula uma pontuação de 0 a 100 com as mesmas
+            regras que você aprendeu aqui: HTTPS, nome do site, endereço feito só
+            de números (IP), terminações suspeitas, links encurtados e sinais
+            comuns de phishing. A checagem do Google Safe Browsing é opcional e
+            <strong>não vem com chave</strong>: cada pessoa usa a sua própria
+            (<a href="#chave-api">veja como pegar a sua</a>). Quando ela está ativa, o
+            endereço do site também é enviado ao Google para consulta.
           </p>
           <ul class="extension-features">
             <li><span class="feature-check">✓</span> Pontuação de confiabilidade em tempo real</li>
-            <li><span class="feature-check">✓</span> Detecção de typosquatting (ex: g00gle.com, paypa1.com)</li>
-            <li><span class="feature-check">✓</span> Identifica domínios com aparência de malware (DGA)</li>
-            <li><span class="feature-check">✓</span> Checagem opcional na base do Google Safe Browsing</li>
-            <li><span class="feature-check">✓</span> Funciona offline, sem coleta de dados</li>
-            <li><span class="feature-check">✓</span> Compatível com Chrome, Edge e Brave</li>
+            <li><span class="feature-check">✓</span> Detecção de sites que imitam marcas (ex: g00gle.com imitando google.com, paypa1.com imitando paypal.com)</li>
+            <li><span class="feature-check">✓</span> Identifica nomes de site com aparência aleatória, comuns em golpes</li>
+            <li><span class="feature-check">✓</span> Checagem opcional no Google Safe Browsing, com a sua própria chave de API</li>
+            <li><span class="feature-check">✓</span> A análise local funciona sem enviar nada para fora do navegador</li>
+            <li><span class="feature-check">✓</span> Feita para Chrome, Edge, Brave, Opera e Firefox (testada só em teoria; veja a instalação)</li>
           </ul>
           <div class="extension-btns">
             <a href="./site-checker-extension.zip" download class="btn-primary">⬇ Baixar Extensão</a>
@@ -339,17 +359,43 @@
               <li>Ative o <strong>"Modo do desenvolvedor"</strong> (canto superior direito).</li>
               <li>Clique em <strong>"Carregar sem compactação"</strong> e selecione a pasta extraída.</li>
               <li>Pronto! O ícone do escudo aparecerá na barra de extensões.</li>
+              <li><strong>Firefox:</strong> acesse <code>about:debugging</code>, clique em "Este Firefox" e em "Carregar extensão temporária", e escolha o arquivo <code>manifest.json</code>.</li>
             </ol>
           </div>
+
+          <div id="chave-api" class="install-steps">
+            <h4>// Como ativar a checagem do Google (opcional)</h4>
+            <p>
+              A extensão <strong>não vem com chave de API</strong>. Sem ela, tudo funciona
+              normalmente com a análise local. Se você quiser que o Google Safe Browsing também
+              confira os sites, crie a sua chave gratuita (uso não comercial):
+            </p>
+            <ol>
+              <li>Entre com sua conta Google em <a href="https://console.cloud.google.com" target="_blank" rel="noopener">console.cloud.google.com</a> e crie um projeto novo.</li>
+              <li>Vá em <strong>APIs e serviços → Biblioteca</strong>, procure <strong>Safe Browsing API</strong> (a versão normal, não a "Legacy") e clique em <strong>Ativar</strong>.</li>
+              <li>Vá em <strong>Credenciais → Criar credenciais → Chave de API</strong>.</li>
+              <li>Abra a chave criada. Em <strong>Restrições do aplicativo</strong>, deixe <strong>Nenhum</strong>. Em <strong>Restrições de API</strong>, marque <strong>Restringir chave</strong>, escolha só a Safe Browsing API e salve.</li>
+              <li>Abra o popup da extensão, clique em <strong>⚙️ Configurações</strong>, cole a chave e clique em <strong>Salvar</strong>.</li>
+              <li>Teste abrindo <code>https://testsafebrowsing.appspot.com/s/malware.html</code> (página de teste do Google): deve aparecer "Ameaça confirmada".</li>
+            </ol>
+            <p>
+              <strong>Cuidados:</strong> a chave é pessoal, então não a publique nem a compartilhe.
+              Com ela ativa, o endereço dos sites que você visita é enviado ao Google para consulta.
+              Documentação oficial: <a href="https://developers.google.com/safe-browsing/" target="_blank" rel="noopener">developers.google.com/safe-browsing</a>.
+            </p>
+          </div>
+
         </div>
       </div>
     </div>
   </section>
 
+  <!-- Quiz de segurança (a lógica está no main.js) -->
+
   <section id="quiz">
     <div class="container">
       <div class="section-header animate-up">
-        <span class="section-tag">// 05 — Teste</span>
+        <span class="section-tag">// 05 - Teste</span>
         <h2 class="section-title">Quiz de <span>Segurança Digital</span></h2>
         <div class="divider"></div>
         <p class="section-subtitle">
@@ -362,8 +408,8 @@
           <h3>// Pronto para começar?</h3>
           <p>Responda 10 perguntas sobre segurança digital e descubra seu nível de proteção.</p>
           <div class="quiz-meta">
-            <div class="quiz-meta-item"><span>⚡</span><span>10 perguntas</span></div>
-            <div class="quiz-meta-item"><span>⏱️</span><span>~5 minutos</span></div>
+            <div class="quiz-meta-item"><span>⚡</span><span id="quiz-meta-perguntas">10 perguntas</span></div>
+            <div class="quiz-meta-item"><span>⏱️</span><span>5 minutos</span></div>
             <div class="quiz-meta-item"><span>🎯</span><span>Feedback imediato</span></div>
           </div>
           <button id="quiz-start-btn" class="btn-primary">▶ Iniciar Quiz</button>
@@ -381,7 +427,7 @@
           </div>
           <div class="quiz-nav">
             <button id="quiz-next-btn" class="btn-primary" style="display:none;">
-              Próxima →
+              Próxima
             </button>
           </div>
         </div>
@@ -421,6 +467,7 @@
     </div>
   </section>
 
+  <!-- Rodapé -->
   <footer>
     <div class="footer-grid">
       <div class="footer-brand">
@@ -438,6 +485,7 @@
           <li><a href="#home">Home</a></li>
           <li><a href="#ameacas">Ameaças</a></li>
           <li><a href="#dicas">Dicas</a></li>
+          <li><a href="boas-praticas.html">Boas Práticas</a></li>
           <li><a href="#ferramentas">Ferramentas</a></li>
           <li><a href="#extensao">Extensão</a></li>
           <li><a href="#quiz">Quiz</a></li>
@@ -450,6 +498,7 @@
           <li><a href="https://haveibeenpwned.com" target="_blank" rel="noopener">Have I Been Pwned</a></li>
           <li><a href="https://bitwarden.com" target="_blank" rel="noopener">Bitwarden</a></li>
           <li><a href="https://proton.me/mail" target="_blank" rel="noopener">Proton Mail</a></li>
+          <li><a href="boas-praticas.html#referencias">Referências</a></li>
           <li><a href="https://www.cert.br" target="_blank" rel="noopener">CERT.br</a></li>
         </ul>
       </div>

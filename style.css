@@ -1335,3 +1335,17 @@ footer {
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
   .animate-up { opacity: 1; transform: none; }
 }
+
+/* página de boas práticas */
+.pagina-topo { padding-top: 8rem; }
+.praticas { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; margin-top: 2.5rem; }
+.pratica { background: var(--bg-card); border: 1px solid rgba(0, 245, 196, 0.15); border-radius: 8px; padding: 1.75rem; }
+.pratica-num { font-family: var(--font-mono); color: var(--primary); font-size: 0.85rem; }
+.pratica h2 { margin: 0.4rem 0 0.75rem; font-size: 1.25rem; }
+.pratica p { color: var(--text-muted); line-height: 1.7; margin-bottom: 0.9rem; }
+.pratica .fonte { font-family: var(--font-mono); font-size: 0.75rem; margin-bottom: 0; }
+.pratica .fonte a, .refs a:not(.btn-secondary) { color: var(--primary); text-decoration: underline; }
+.refs { margin-top: 3rem; }
+.refs h2 { margin-bottom: 1rem; }
+.refs ol { padding-left: 1.25rem; color: var(--text-muted); line-height: 1.9; margin-bottom: 1.5rem; }
+.footer-bottom a { color: var(--primary); }

@@ -1,17 +1,19 @@
-// partículas do hero
+// Código principal do site: menu, números do início da página e quiz.
+
 function createParticles() {
   const container = document.querySelector('.particles');
   if (!container) return;
 
   for (let i = 0; i < 30; i++) {
-    const p = document.createElement('div');
+    const bolinha = document.createElement('div');
     const tamanho = Math.random() * 3 + 1;
-    p.className = 'particle';
-    p.style.left = Math.random() * 100 + '%';
-    p.style.animationDuration = 8 + Math.random() * 15 + 's';
-    p.style.animationDelay = Math.random() * 10 + 's';
-    p.style.width = p.style.height = tamanho + 'px';
-    container.appendChild(p);
+    bolinha.className = 'particle';
+    bolinha.style.left = Math.random() * 100 + '%';
+    bolinha.style.animationDuration = 8 + Math.random() * 15 + 's';
+    bolinha.style.animationDelay = Math.random() * 10 + 's';
+    bolinha.style.width = tamanho + 'px';
+    bolinha.style.height = tamanho + 'px';
+    container.appendChild(bolinha);
   }
 }
 
@@ -27,77 +29,170 @@ function initNavbar() {
     hamburger.setAttribute('aria-expanded', 'false');
   }
 
-  hamburger.addEventListener('click', () => {
+  hamburger.addEventListener('click', function () {
     const aberto = navLinks.classList.toggle('open');
     hamburger.setAttribute('aria-expanded', aberto);
   });
-  links.forEach(l => l.addEventListener('click', fecharMenu));
 
-  window.addEventListener('scroll', () => {
-    navbar.style.background = window.scrollY > 50
-      ? 'rgba(3,7,18,0.97)'
-      : 'rgba(3,7,18,0.85)';
+  for (let i = 0; i < links.length; i++) {
+    links[i].addEventListener('click', fecharMenu);
+  }
 
-    // marca no menu a seção que está na tela
+  window.addEventListener('scroll', function () {
+    if (window.scrollY > 50) {
+      navbar.style.background = 'rgba(3,7,18,0.97)';
+    } else {
+      navbar.style.background = 'rgba(3,7,18,0.85)';
+    }
+
     let atual = '';
-    sections.forEach(sec => {
-      if (window.scrollY >= sec.offsetTop - 120) atual = sec.id;
-    });
-    links.forEach(link => {
-      link.classList.toggle('active', link.getAttribute('href') === '#' + atual);
-    });
+    for (let i = 0; i < sections.length; i++) {
+      if (window.scrollY >= sections[i].offsetTop - 120) {
+        atual = sections[i].id;
+      }
+    }
+    for (let i = 0; i < links.length; i++) {
+      if (links[i].getAttribute('href') === '#' + atual) {
+        links[i].classList.add('active');
+      } else {
+        links[i].classList.remove('active');
+      }
+    }
   });
 }
 
-function initScrollAnimations() {
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry, i) => {
-      if (!entry.isIntersecting) return;
-      setTimeout(() => entry.target.classList.add('visible'), i * 80);
-      observer.unobserve(entry.target);
-    });
-  }, { threshold: 0.1 });
-
-  document.querySelectorAll('.animate-up').forEach(el => observer.observe(el));
+function mostrarAoRolar() {
+  const itens = document.querySelectorAll('.animate-up');
+  for (let i = 0; i < itens.length; i++) {
+    const topo = itens[i].getBoundingClientRect().top;
+    if (topo < window.innerHeight - 60) {
+      itens[i].classList.add('visible');
+    }
+  }
 }
 
-function typewriter(el, texto, velocidade = 60) {
+function typewriter(elemento, texto, velocidade) {
   let i = 0;
-  el.textContent = '';
-  const timer = setInterval(() => {
-    el.textContent += texto[i++];
+  elemento.textContent = '';
+  const timer = setInterval(function () {
+    elemento.textContent += texto[i];
+    i++;
     if (i >= texto.length) clearInterval(timer);
   }, velocidade);
 }
 
-function animateCounter(el, alvo, sufixo = '') {
-  const duracao = 2000;
-  let inicio = null;
+function contar(elemento, valorFinal, formatar) {
+  let atual = 0;
+  const passo = valorFinal / 60;
+  const timer = setInterval(function () {
+    atual = atual + passo;
+    if (atual >= valorFinal) {
+      atual = valorFinal;
+      clearInterval(timer);
+    }
+    elemento.textContent = formatar(Math.floor(atual));
+  }, 30);
+}
 
-  function passo(agora) {
-    if (!inicio) inicio = agora;
-    const progresso = Math.min((agora - inicio) / duracao, 1);
-    const suave = 1 - Math.pow(1 - progresso, 3);
-    el.textContent = Math.floor(suave * alvo) + sufixo;
-    if (progresso < 1) requestAnimationFrame(passo);
+/*
+  Números do início da página
+
+  Esses números não são digitados por mim. Toda vez que alguém abre o site,
+  ele consulta a API pública do Have I Been Pwned, que guarda a lista de
+  vazamentos de dados conhecidos. Com a resposta eu faço duas contas:
+    - vazamentos = quantos itens vieram na lista
+    - contas expostas = soma do campo PwnCount de todos os vazamentos
+
+  A lista é grande e a própria documentação pede para não consultar sem
+  necessidade, então a resposta fica salva no navegador por 1 hora
+  (localStorage). Se a internet cair, o site mostra o último valor salvo.
+*/
+const URL_VAZAMENTOS = 'https://haveibeenpwned.com/api/v3/breaches';
+const URL_ULTIMO = 'https://haveibeenpwned.com/api/v3/latestBreach';
+const UMA_HORA = 60 * 60 * 1000;
+
+function formatarNumero(n) {
+  if (n >= 1000000000) {
+    return (n / 1000000000).toFixed(1).replace('.', ',') + ' bi';
   }
-  requestAnimationFrame(passo);
+  if (n >= 1000000) {
+    return (n / 1000000).toFixed(1).replace('.', ',') + ' mi';
+  }
+  return n.toLocaleString('pt-BR');
 }
 
-function initCounters() {
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (!entry.isIntersecting) return;
-      const el = entry.target;
-      animateCounter(el, parseInt(el.dataset.counter, 10), el.dataset.suffix || '');
-      observer.unobserve(el);
-    });
-  }, { threshold: 0.5 });
-
-  document.querySelectorAll('[data-counter]').forEach(el => observer.observe(el));
+function lerCache() {
+  try {
+    return JSON.parse(localStorage.getItem('dadosVazamentos'));
+  } catch (erro) {
+    return null;
+  }
 }
 
-// ---------- quiz ----------
+function salvarCache(dados) {
+  try {
+    localStorage.setItem('dadosVazamentos', JSON.stringify(dados));
+  } catch (erro) {
+  }
+}
+
+async function buscarDados() {
+  const resposta1 = await fetch(URL_VAZAMENTOS);
+  const lista = await resposta1.json();
+
+  let totalContas = 0;
+  for (let i = 0; i < lista.length; i++) {
+    totalContas = totalContas + lista[i].PwnCount;
+  }
+
+  const resposta2 = await fetch(URL_ULTIMO);
+  const ultimo = await resposta2.json();
+
+  return {
+    vazamentos: lista.length,
+    contas: totalContas,
+    ultimoNome: ultimo.Title,
+    ultimaData: ultimo.AddedDate,
+    atualizadoEm: Date.now()
+  };
+}
+
+async function carregarEstatisticas() {
+  const elVazamentos = document.getElementById('stat-vazamentos');
+  const elContas = document.getElementById('stat-contas');
+  const elUltimo = document.getElementById('ultimo-vazamento');
+  const elQuiz = document.getElementById('stat-quiz');
+
+  if (elQuiz) contar(elQuiz, quizQuestions.length, formatarNumero);
+  if (!elVazamentos) return;
+
+  // usa o que está salvo e só busca de novo se tiver passado mais de 1 hora
+  let dados = lerCache();
+  const cacheNovo = dados && Date.now() - dados.atualizadoEm < UMA_HORA;
+
+  if (!cacheNovo) {
+    try {
+      dados = await buscarDados();
+      salvarCache(dados);
+    } catch (erro) {
+      console.log('Não deu para buscar os dados agora:', erro);
+    }
+  }
+
+  if (!dados) {
+    elVazamentos.textContent = 'indisponível';
+    elContas.textContent = 'indisponível';
+    return;
+  }
+
+  contar(elVazamentos, dados.vazamentos, formatarNumero);
+  contar(elContas, dados.contas, formatarNumero);
+
+  if (elUltimo && dados.ultimoNome) {
+    const data = new Date(dados.ultimaData).toLocaleDateString('pt-BR');
+    elUltimo.textContent = 'Último vazamento adicionado: ' + dados.ultimoNome + ' (' + data + '). ';
+  }
+}
 
 const quizQuestions = [
   {
@@ -175,7 +270,7 @@ const quizQuestions = [
       "Pode fazer o computador travar"
     ],
     answer: 2,
-    explanation: "Usar senhas únicas em cada serviço é essencial. Se um site sofrer vazamento de dados, criminosos tentarão a mesma senha em outros serviços — prática chamada 'credential stuffing'."
+    explanation: "Usar senhas únicas em cada serviço é essencial. Se um site sofrer vazamento de dados, criminosos tentarão a mesma senha em outros serviços - prática chamada 'credential stuffing'."
   },
   {
     q: "O que é ransomware?",
@@ -212,22 +307,34 @@ const quizQuestions = [
   }
 ];
 
+/*
+  Quiz
+
+  Cada pergunta do vetor quizQuestions tem: q (o texto), options (as
+  alternativas), answer (a posição da certa, começando do 0) e explanation
+  (o que aparece depois de responder). As alternativas são embaralhadas a
+  cada pergunta, por isso o código guarda a posição original de cada uma
+  para saber qual é a correta.
+*/
 let currentQuestion = 0;
 let score = 0;
 let answered = false;
-let ordem = []; // índices das opções embaralhadas da pergunta atual
+let ordem = [];
 
 function embaralhar(lista) {
-  const a = [...lista];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
+  return lista.sort(function () {
+    return Math.random() - 0.5;
+  });
 }
 
 function initQuiz() {
-  document.getElementById('quiz-start-btn').addEventListener('click', startQuiz);
+  const meta = document.getElementById('quiz-meta-perguntas');
+  if (meta) meta.textContent = quizQuestions.length + ' perguntas';
+
+  const botaoIniciar = document.getElementById('quiz-start-btn');
+  if (!botaoIniciar) return;
+
+  botaoIniciar.addEventListener('click', startQuiz);
   document.getElementById('quiz-restart-btn').addEventListener('click', startQuiz);
   document.getElementById('quiz-next-btn').addEventListener('click', nextQuestion);
 }
@@ -251,54 +358,67 @@ function renderQuestion() {
   const feedback = document.querySelector('.quiz-feedback');
 
   answered = false;
-  ordem = embaralhar(q.options.map((_, i) => i));
+
+  ordem = [];
+  for (let i = 0; i < q.options.length; i++) {
+    ordem.push(i);
+  }
+  ordem = embaralhar(ordem);
 
   document.querySelector('.quiz-progress-bar').style.width = (currentQuestion / total) * 100 + '%';
   document.querySelector('.quiz-counter').innerHTML =
-    `Pergunta <span>${currentQuestion + 1}</span> de <span>${total}</span>`;
+    'Pergunta <span>' + (currentQuestion + 1) + '</span> de <span>' + total + '</span>';
   document.querySelector('.quiz-question-text').textContent = q.q;
 
   container.innerHTML = '';
-  ordem.forEach((indiceOriginal, pos) => {
-    const btn = document.createElement('button');
-    const letra = document.createElement('span');
-    const texto = document.createElement('span');
-
-    btn.className = 'quiz-option';
-    letra.className = 'quiz-option-letter';
-    letra.textContent = letras[pos];
-    texto.textContent = q.options[indiceOriginal];
-    btn.append(letra, texto);
-
-    btn.addEventListener('click', () => selectAnswer(indiceOriginal, btn));
-    container.appendChild(btn);
-  });
+  for (let pos = 0; pos < ordem.length; pos++) {
+    criarOpcao(container, q, ordem[pos], letras[pos]);
+  }
 
   feedback.className = 'quiz-feedback';
   feedback.textContent = '';
   document.getElementById('quiz-next-btn').style.display = 'none';
 }
 
-function selectAnswer(escolhida, btnClicado) {
+function criarOpcao(container, q, indiceOriginal, letra) {
+  const botao = document.createElement('button');
+  const spanLetra = document.createElement('span');
+  const spanTexto = document.createElement('span');
+
+  botao.className = 'quiz-option';
+  spanLetra.className = 'quiz-option-letter';
+  spanLetra.textContent = letra;
+  spanTexto.textContent = q.options[indiceOriginal];
+
+  botao.appendChild(spanLetra);
+  botao.appendChild(spanTexto);
+  botao.addEventListener('click', function () {
+    selectAnswer(indiceOriginal, botao);
+  });
+  container.appendChild(botao);
+}
+
+function selectAnswer(escolhida, botaoClicado) {
   if (answered) return;
   answered = true;
 
   const q = quizQuestions[currentQuestion];
   const botoes = document.querySelectorAll('.quiz-option');
   const feedback = document.querySelector('.quiz-feedback');
-  const acertou = escolhida === q.answer;
 
-  botoes.forEach(b => (b.disabled = true));
+  for (let i = 0; i < botoes.length; i++) {
+    botoes[i].disabled = true;
+  }
   botoes[ordem.indexOf(q.answer)].classList.add('correct');
 
-  if (acertou) {
+  if (escolhida === q.answer) {
     score++;
     feedback.className = 'quiz-feedback feedback-correct show';
-    feedback.innerHTML = `<span>✓</span><span><strong>Correto!</strong> ${q.explanation}</span>`;
+    feedback.innerHTML = '<span>✓</span><span><strong>Correto!</strong> ' + q.explanation + '</span>';
   } else {
-    btnClicado.classList.add('wrong');
+    botaoClicado.classList.add('wrong');
     feedback.className = 'quiz-feedback feedback-wrong show';
-    feedback.innerHTML = `<span>✗</span><span><strong>Incorreto.</strong> ${q.explanation}</span>`;
+    feedback.innerHTML = '<span>✗</span><span><strong>Incorreto.</strong> ' + q.explanation + '</span>';
   }
 
   document.getElementById('quiz-next-btn').style.display = 'flex';
@@ -321,7 +441,13 @@ function showResult() {
   const titulo = document.querySelector('.result-title');
   const msg = document.querySelector('.result-msg');
   const circunferencia = 2 * Math.PI * 54;
-  const cor = pct >= 80 ? 'var(--primary)' : pct >= 50 ? '#fbbf24' : 'var(--secondary)';
+
+  let cor = 'var(--secondary)';
+  if (pct >= 80) {
+    cor = 'var(--primary)';
+  } else if (pct >= 50) {
+    cor = '#fbbf24';
+  }
 
   document.querySelector('.quiz-active').style.display = 'none';
   document.querySelector('.quiz-result').style.display = 'block';
@@ -331,15 +457,14 @@ function showResult() {
   ring.style.strokeDashoffset = circunferencia;
   ring.style.stroke = cor;
   pctEl.style.color = cor;
-  setTimeout(() => {
+  setTimeout(function () {
     ring.style.strokeDashoffset = circunferencia - (pct / 100) * circunferencia;
   }, 100);
 
-  // contagem da porcentagem (começa em 0 para não mostrar 1% quando errou tudo)
   let n = 0;
   pctEl.textContent = '0%';
   if (pct > 0) {
-    const contador = setInterval(() => {
+    const contador = setInterval(function () {
       n++;
       pctEl.textContent = n + '%';
       if (n >= pct) clearInterval(contador);
@@ -365,16 +490,20 @@ function showResult() {
   }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', function () {
   createParticles();
   initNavbar();
-  initScrollAnimations();
-  initCounters();
   initQuiz();
+  carregarEstatisticas();
+
+  mostrarAoRolar();
+  window.addEventListener('scroll', mostrarAoRolar);
 
   const titulo = document.querySelector('.hero-typewriter');
   if (titulo) {
     const texto = titulo.textContent;
-    setTimeout(() => typewriter(titulo, texto, 55), 500);
+    setTimeout(function () {
+      typewriter(titulo, texto, 55);
+    }, 500);
   }
 });
